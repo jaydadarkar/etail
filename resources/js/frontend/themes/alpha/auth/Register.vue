@@ -19,7 +19,8 @@
                             <label for="password" class="grey-text">Your password</label>
                             <input type="password" id="password" name="password" class="form-control" v-model="registerForm.password"/>
                             <div class="text-center mt-4">
-                                <button class="btn btn-primary" type="submit">Register</button>
+                                <button class="btn btn-primary btn-lg" type="submit">Register</button><br />
+                                Already have an account? <a href="/login">Login</a>
                             </div>
                         </form>
                     </div>
@@ -55,6 +56,8 @@ export default {
             register(){
                     axios.post('/api/register', this.registerForm).then(response => {
                     this.$router.push({name: 'Dashboard'});                    
+                    }).catch(error => {
+                        this.error = error;
                     });
             }
         },

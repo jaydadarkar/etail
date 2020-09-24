@@ -18,10 +18,10 @@
         <a class="nav-link" href="/shop">Shop</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/about-us">About</a>
+        <a class="nav-link" href="/pages/about-us">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/contact-us">Contact</a>
+        <a class="nav-link" href="/pages/contact-us">Contact</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -41,11 +41,12 @@
           My Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/dashboard">Dashboard</a>
-          <a class="dropdown-item" href="/login">Login</a>
-          <a class="dropdown-item" href="/register">Register</a>
-          <a class="dropdown-item" href="/helpdesk">Helpdesk</a>
-          <a class="dropdown-item" href="/logout">Logout</a>
+          <a class="dropdown-item" v-bind:class="[dashboard ? 'd-block' : 'd-none']" href="/dashboard">Dashboard</a>
+          <a class="dropdown-item" v-bind:class="[admin ? 'd-block' : 'd-none']" href="/admin">Admin</a>
+          <a class="dropdown-item" v-bind:class="[login ? 'd-block' : 'd-none']" href="/login">Login</a>
+          <a class="dropdown-item" v-bind:class="[register ? 'd-block' : 'd-none']" href="/register">Register</a>
+          <a class="dropdown-item" v-bind:class="[helpdesk ? 'd-block' : 'd-none']" href="/helpdesk">Helpdesk</a>
+          <a class="dropdown-item" v-bind:class="[logout ? 'd-block' : 'd-none']" href="/logout">Logout</a>
         </div>
       </li>
     </ul>
@@ -55,6 +56,43 @@
 
 <script>
     export default {
-      name: 'Header'
+      data(){
+        return{
+          dashboard: false,
+          admin: false,
+          login: false,
+          register: false,
+          helpdesk: false,
+          logout: false,
+        }
+      },
+      mounted(){
+        if(localStorage.getItem('isLoggedIn') == 1){
+          if(localStorage.getItem('role') == 'admin'){
+          this.admin = true;
+          this.dashboard = true;
+          this.helpdesk = false;
+          this.logout = true;
+          this.login = false;
+          this.register = false;
+          }
+          else{
+          this.admin = false;
+          this.dashboard = true;
+          this.helpdesk = true;
+          this.logout = true;
+          this.login = false;
+          this.register = false;
+          }
+        }
+        else{
+          this.admin = false;
+          this.dashboard = false;
+          this.helpdesk = false;
+          this.logout = false;
+          this.login = true;
+          this.register = true;          
+        }
+      }
     }
 </script>

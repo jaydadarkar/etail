@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\CustomResetPassword;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 
@@ -23,7 +24,8 @@ Route::middleware('auth:sanctum')->get('/dashboard', function (Request $request)
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [RegisterController::class, 'register'])->name('register');
-// Route::middleware('auth:sanctum')->get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+Route::post('/reset', [CustomResetPassword::class, 'reset'])->name('reset');
+Route::post('/password/confirm', [CustomResetPassword::class, 'resetPasswordWithToken'])->name('confirm');
 Route::middleware('auth:sanctum')->post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 

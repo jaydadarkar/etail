@@ -28,14 +28,14 @@ import NotFoundComponent from './frontend/themes/alpha/NotFound.vue';
 
 export const routes = [
     { path: '/', component: Home, name: 'Home' },
-    { path: '/page/:slug', component: Page, name: 'Page' },
+    { path: '/pages/:page_name', component: Page, name: 'Page' },
 
     { path: '/dashboard', component: Dashboard, name: 'Dashboard' },
     { path: '/login', component: Login, name: 'Login' },
     { path: '/logout', component: Logout, name: 'Logout' },
     { path: '/register', component: Register, name: 'Register' },
     { path: '/reset', component: ResetPassword, name: 'ResetPassword' },
-    { path: '/confirm', component: ConfirmNewPassword, name: 'ConfirmNewPassword' },
+    { path: '/password/reset/:token', component: ConfirmNewPassword, name: 'ConfirmNewPassword' },
 
     { path: '/helpdesk', component: HelpdeskIndex, name: 'HelpdeskIndex' },
     { path: '/helpdesk/:id', component: HelpdeskDetail, name: 'HelpdeskDetail' },

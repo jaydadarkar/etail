@@ -8,6 +8,8 @@ import Footer from '../components/Footer';
 export default {
         mounted() {
                     axios.post('/api/logout').then(response => {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('role');
                     this.$router.push({name: 'Login'});
                     });
         }

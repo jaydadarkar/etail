@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', 'HomeController@index')->name('home');
 
 
-Route::get('/{any?}', function(){
+// Route::get('/{any?}', function(){
+//     return view('index');
+// })->where('any','[\/\w\.-]*');
+
+Route::any('{all?}', function () {
     return view('index');
-})->where('any','[\/\w\.-]*');
+})
+->where(['all' => '.*']);

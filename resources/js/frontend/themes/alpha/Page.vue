@@ -26,6 +26,6 @@ export default {
         components: {
             'v-header': Header,
             'v-footer': Footer
-        }
+        },
     }
 </script>

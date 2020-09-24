@@ -15,8 +15,13 @@
                             <br />
                             <label for="password" class="grey-text">Your password</label>
                             <input type="password" id="password" name="password" class="form-control" v-model="loginForm.password"/>
+                            <br />
+                            <div class="text-right">
+                                <a href="/reset">Forgot Password?</a>
+                            </div>
                             <div class="text-center mt-4">
-                                <button class="btn btn-primary" type="submit">Login</button>
+                                <button class="btn btn-primary btn-lg" type="submit">Login</button>
+                                <a class="btn btn-secondary btn-lg" href="/register">Register</a>
                             </div>
                         </form>
                     </div>
@@ -39,7 +44,8 @@ export default {
                 loginForm: {
                 email: '',
                 password: '',
-                device_name: 'web'
+                device_name: 'web',
+                error: ''
                 }
             }            
         },
@@ -50,7 +56,11 @@ export default {
         methods: {
             login(){
                     axios.post('/api/login', this.loginForm).then(response => {
+                    localStorage.setItem('isLoggedIn', '1');
+                    localStorage.setItem('role', response.data.role);
                     this.$router.push({name: 'Dashboard'});
+                    }).catch(error => {
+                        this.error = error;
                     });
             }
         },

@@ -59,7 +59,7 @@ class LoginController extends Controller
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $token = $user->createToken('etail_token')->plainTextToken;
-            return response()->json($token, 200);
+            return response()->json(['token' => $token, 'role' => $user->role], 200);
         }
         else{
             return response()->json(['error' => 'Invalid Email / Password.'], 402);
