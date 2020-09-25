@@ -61,7 +61,12 @@ import Sidebar from './Sidebar';
 export default {
     components: {
         'sidebar': Sidebar
-    }
+    },
+    mounted(){
+            axios.post('/api/admin')
+            .then(response => {this.message = response.data.message})
+            .catch(response =>{this.$router.push({name: 'Login'})});
+        }
     }
 </script>
 

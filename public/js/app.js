@@ -1971,6 +1971,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.post('/api/admin').then(function (response) {
+      _this.message = response.data.message;
+    })["catch"](function (response) {
+      _this.$router.push({
+        name: 'Login'
+      });
+    });
   }
 });
 
