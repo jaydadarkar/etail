@@ -41,4 +41,5 @@ Route::middleware('auth:sanctum')->post('/admin', function(){
 })->name('admin');
 
 
-Route::middleware('auth:sanctum')->post('/api/product/create/insert', 'ProductController@create');
+Route::middleware('auth:sanctum')->post('/product/create/insert', 'ProductController@create');
+Route::get('/product/create/insert', 'ProductController@create');

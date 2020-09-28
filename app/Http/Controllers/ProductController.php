@@ -27,26 +27,26 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-            DB::table('products')->insert([
-                'product_name' => 'abc',
+            $p = Product::create([
+                'product_name' => $request->name,
                 'product_sku' => 'ABC',
                 'product_slug' => 'abc',
-                'product_category' => 'abc',
+                'product_category' => $request->category,
                 'product_variation' => '[size: M]',
-                'product_short_desc' => 'abc',
+                'product_short_desc' => $request->description,
                 'product_long_desc' => 'ABC',
                 'product_mrp' => 599,
-                'product_price' => 599,
+                'product_price' => $request->price,
                 'product_primary_image' => 'abc',
                 'product_other_images' => 'abc',
                 'product_meta_keywords' => 'abc',
                 'product_meta_desc' => 'abc',
                 'product_featured' => 1,
                 'product_tags' => 'abc',
-                'created_at' => '',
-                'updated_at' => ''
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
-            return response()->json('Product Created', 200);
+            return response()->json($p, 200);
     }
 
     /**
