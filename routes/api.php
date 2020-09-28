@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\CustomResetPassword;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +39,6 @@ Route::middleware('auth:sanctum')->post('/admin', function(){
         return response()->json('Unauthorized Access', 401);
     }
 })->name('admin');
+
+
+Route::middleware('auth:sanctum')->post('/api/product/create/insert', 'ProductController@create');

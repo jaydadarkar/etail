@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Auth;
+use DB;
 
 class ProductController extends Controller
 {
@@ -22,9 +25,28 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+            DB::table('products')->insert([
+                'product_name' => 'abc',
+                'product_sku' => 'ABC',
+                'product_slug' => 'abc',
+                'product_category' => 'abc',
+                'product_variation' => '[size: M]',
+                'product_short_desc' => 'abc',
+                'product_long_desc' => 'ABC',
+                'product_mrp' => 599,
+                'product_price' => 599,
+                'product_primary_image' => 'abc',
+                'product_other_images' => 'abc',
+                'product_meta_keywords' => 'abc',
+                'product_meta_desc' => 'abc',
+                'product_featured' => 1,
+                'product_tags' => 'abc',
+                'created_at' => '',
+                'updated_at' => ''
+            ]);
+            return response()->json('Product Created', 200);
     }
 
     /**

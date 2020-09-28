@@ -15,7 +15,7 @@
                         <li class="nav-item">
                             <a class="nav-link p-3 dropdown-toogle" href="#" role="button" id="shop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">shopping_cart</span> <span class="d-none d-md-inline"> Shop</span></a>
                             <div class="dropdown-menu bg-light dropdown-width rounded-0 shadow w-100" aria-labelledby="shop">
-                                <a class="dropdown-item" href="#">Products</a>
+                                <a class="dropdown-item" href="/admin/product">Products</a>
                                 <a class="dropdown-item" href="#">New</a>
                                 <a class="dropdown-item" href="#">Ratings</a>
                                 <a class="dropdown-item" href="#">Orders</a>

@@ -22,6 +22,7 @@ import Cart from './frontend/themes/alpha/shop/Cart.vue';
 import Checkout from './frontend/themes/alpha/shop/Checkout.vue';
 
 import Admin from './admin/Admin.vue';
+import ProductAdmin from './admin/shop/ProductIndex.vue'
 
 import Example from './frontend/themes/alpha/Example.vue';
 import NotFoundComponent from './frontend/themes/alpha/NotFound.vue';
@@ -51,6 +52,7 @@ export const routes = [
     { path: '/checkout', component: Checkout, name: 'Checkout' },
 
     { path: '/admin', component: Admin, name: 'Admin' },
+    { path: '/admin/product', component: ProductAdmin, name: 'ProductAdmin' },
     
     { path: '/example', component: Example, name: 'Example' },
 
