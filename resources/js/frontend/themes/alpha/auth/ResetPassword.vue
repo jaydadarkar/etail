@@ -43,15 +43,19 @@ export default {
             'v-footer': Footer
         },
         methods: {
-            reset(){
-                axios.post('/api/reset', this.form)
+            async reset(){
+                await axios.post('/api/reset', this.form)
                 .then(response => {
-                    console.log(response);
+                    
                 })
                 .catch(error => {
                         this.error = error;
                     });
             }
+        },
+        beforeCreate(){
+            axios.get('/api/dashboard')
+            .then(response => {this.$router.push({name: 'Dashboard'})});
         }
     }
 </script>

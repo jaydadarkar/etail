@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\HelpdeskMessage;
+use App\Models\HelpdeskMessage;
 use Illuminate\Http\Request;
 
 class HelpdeskMessageController extends Controller

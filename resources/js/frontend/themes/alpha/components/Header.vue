@@ -68,7 +68,7 @@
       },
       mounted(){
         if(localStorage.getItem('isLoggedIn') == 1){
-          if(localStorage.getItem('role') == 'admin'){
+          if(localStorage.getItem('role') == 'admin' || localStorage.getItem('role') == 'manager' || localStorage.getItem('role') == 'blogger'){
           this.admin = true;
           this.dashboard = true;
           this.helpdesk = false;

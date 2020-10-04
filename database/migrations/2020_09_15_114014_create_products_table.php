@@ -29,6 +29,7 @@ class CreateProductsTable extends Migration
             $table->string('product_meta_keywords')->nullable();
             $table->string('product_meta_desc')->nullable();
             $table->integer('product_featured')->nullable();
+            $table->integer('product_published')->default(1);
             $table->string('product_tags')->nullable();
             $table->timestamps();
         });

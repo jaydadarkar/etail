@@ -45,10 +45,9 @@ export default {
             'v-footer': Footer
         },
         methods: {
-            confirm(){
-                axios.post('/api/password/confirm', this.form)
+            async confirm(){
+                await axios.post('/api/password/confirm', this.form)
                 .then(response => {
-                    console.log(response);
                 })
                 .catch(error => {
                         this.error = error;

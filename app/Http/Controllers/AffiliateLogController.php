@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AffiliateLog;
+use App\Models\AffiliateLog;
 use Illuminate\Http\Request;
 
 class AffiliateLogController extends Controller

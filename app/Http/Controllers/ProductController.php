@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
-use DB;
 
 class ProductController extends Controller
 {
@@ -25,28 +24,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-            $p = Product::create([
-                'product_name' => $request->name,
-                'product_sku' => 'ABC',
-                'product_slug' => 'abc',
-                'product_category' => $request->category,
-                'product_variation' => '[size: M]',
-                'product_short_desc' => $request->description,
-                'product_long_desc' => 'ABC',
-                'product_mrp' => 599,
-                'product_price' => $request->price,
-                'product_primary_image' => 'abc',
-                'product_other_images' => 'abc',
-                'product_meta_keywords' => 'abc',
-                'product_meta_desc' => 'abc',
-                'product_featured' => 1,
-                'product_tags' => 'abc',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]);
-            return response()->json($p, 200);
+        
     }
 
     /**
@@ -57,7 +37,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $p = Product::create([
+            'product_name' => $request->name,
+            'product_sku' => $request->sku,
+            'product_slug' => $request->slug,
+            'product_category' => $request->category,
+            'product_variation' => $request->variation,
+            'product_short_desc' => $request->short_desc,
+            'product_long_desc' => $request->long_desc,
+            'product_mrp' => $request->mrp,
+            'product_price' => $request->price,
+            'product_primary_image' => $request->image,
+            'product_other_images' => $request->other_image,
+            'product_meta_keywords' => $request->keywords,
+            'product_meta_desc' => $request->meta_desc,
+            'product_featured' => $request->featured,
+            'product_tags' => $request->tags,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        return response()->json($p, 200);
     }
 
     /**
@@ -66,9 +65,10 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Request $request)
     {
-        //
+        $p = Product::where('product_slug', $request->slug)->first();
+        return response()->json($p, 200);
     }
 
     /**
@@ -79,7 +79,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $p = Product::where('id', $request->id)->first();
+        return response()->json($p, 200);
     }
 
     /**
@@ -89,9 +90,27 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
-        //
+        $p = Product::where('id', $request->id)->update([
+            'product_name' => $request->name,
+            'product_sku' => $request->sku,
+            'product_slug' => $request->slug,
+            'product_category' => $request->category,
+            'product_variation' => $request->variation,
+            'product_short_desc' => $request->short_desc,
+            'product_long_desc' => $request->long_desc,
+            'product_mrp' => $request->mrp,
+            'product_price' => $request->price,
+            'product_primary_image' => $request->image,
+            'product_other_images' => $request->other_image,
+            'product_meta_keywords' => $request->keywords,
+            'product_meta_desc' => $request->meta_desc,
+            'product_featured' => $request->featured,
+            'product_tags' => $request->tags,
+            'updated_at' => Carbon::now()
+        ]);
+        return response()->json($p, 200);
     }
 
     /**
@@ -102,6 +121,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $p = Product::destroy($request->id);
+        return response()->json($p, 200);
     }
 }

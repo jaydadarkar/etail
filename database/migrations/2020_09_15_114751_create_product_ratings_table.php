@@ -16,7 +16,6 @@ class CreateProductRatingsTable extends Migration
         Schema::create('product_ratings', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id');
-            $table->string('product_main_sku');
             $table->integer('user_id');
             $table->integer('user_rating');
             $table->string('user_comment')->nullable();

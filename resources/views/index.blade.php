@@ -12,6 +12,10 @@
         <meta property="og:site_name" content="{{ \Config::get('app.name') }}" />
         <meta name="twitter:title" content="{{ \Config::get('app.name') }}" />
         <link rel="icon" href="/favicon.ico">
+        <script>
+            window.csrf = "{{ csrf_token() }}";
+            window.app_url = "{{ \Config::get('app.url') }}";
+        </script>
     </head>
     <body>
         <div id="app">

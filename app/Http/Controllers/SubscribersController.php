@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Subscribers;
+use App\Models\Subscribers;
 use Illuminate\Http\Request;
 
 class SubscribersController extends Controller

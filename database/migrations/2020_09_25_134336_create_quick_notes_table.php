@@ -15,6 +15,7 @@ class CreateQuickNotesTable extends Migration
     {
         Schema::create('quick_notes', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('title');
             $table->string('content');
             $table->timestamps();

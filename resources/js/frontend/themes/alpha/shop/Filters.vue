@@ -57,7 +57,6 @@ export default {
     mounted(){
         var slider = document.getElementById("myRange");
         var output = document.getElementById("demo");
-        console.log(slider.value);
         output.innerHTML = slider.value;
 
         slider.oninput = function() {

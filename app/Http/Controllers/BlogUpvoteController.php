@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\BlogUpvote;
+use App\Models\BlogUpvote;
 use Illuminate\Http\Request;
 
 class BlogUpvoteController extends Controller

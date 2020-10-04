@@ -54,8 +54,8 @@ export default {
             'v-footer': Footer
         },
         methods: {
-            login(){
-                    axios.post('/api/login', this.loginForm).then(response => {
+            async login(){
+                    await axios.post('/api/login', this.loginForm).then(response => {
                     localStorage.setItem('isLoggedIn', '1');
                     localStorage.setItem('role', response.data.role);
                     this.$router.push({name: 'Dashboard'});
@@ -64,8 +64,9 @@ export default {
                     });
             }
         },
-        mounted(){
-            axios.get('/api/dashboard').then(response => {this.$router.push({name: 'Dashboard'})});
+        beforeCreate(){
+            axios.get('/api/dashboard')
+            .then(response => {this.$router.push({name: 'Dashboard'})});
         }
     }
 </script>

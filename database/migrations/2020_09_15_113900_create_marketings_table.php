@@ -15,12 +15,12 @@ class CreateMarketingsTable extends Migration
     {
         Schema::create('marketings', function (Blueprint $table) {
             $table->id();
-            $table->string('campaign_name')->unique();
+            $table->string('campaign_name');
             $table->string('campaign_slug')->unique();
-            $table->string('subject')->unique();
+            $table->string('subject');
             $table->longText('post_content');
-            $table->string('email_count')->unique()->default(0);
-            $table->string('cta_clicks')->unique()->default(0);
+            $table->string('email_count')->default(0);
+            $table->string('cta_clicks')->default(0);
             $table->timestamps();
         });
     }

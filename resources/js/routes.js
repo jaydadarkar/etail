@@ -21,8 +21,22 @@ import ProductDetails from './frontend/themes/alpha/shop/ProductDetail.vue';
 import Cart from './frontend/themes/alpha/shop/Cart.vue';
 import Checkout from './frontend/themes/alpha/shop/Checkout.vue';
 
+// Backend
 import Admin from './admin/Admin.vue';
-import ProductAdmin from './admin/shop/ProductIndex.vue'
+
+import AdminBlogDetail from './admin/blog/BlogDetails.vue'
+import AdminBlogCreate from './admin/blog/BlogCreate.vue'
+import AdminBlogIndex from './admin/blog/BlogIndex.vue'
+import AdminBlogComments from './admin/blog/BlogComments.vue'
+
+import AdminProductIndex from './admin/shop/ProductIndex.vue'
+import AdminProductCreate from './admin/shop/ProductCreate.vue'
+import AdminProductDetail from './admin/shop/ProductDetail.vue'
+import AdminShipping from './admin/shop/Shipping.vue'
+import AdminTax from './admin/shop/Tax.vue'
+
+import AdminHelpdeskDetail from './admin/helpdesk/HelpdeskDetail.vue'
+import AdminHelpdeskIndex from './admin/helpdesk/HelpdeskIndex.vue'
 
 import Example from './frontend/themes/alpha/Example.vue';
 import NotFoundComponent from './frontend/themes/alpha/NotFound.vue';
@@ -51,9 +65,19 @@ export const routes = [
     { path: '/cart', component: Cart, name: 'Cart' },
     { path: '/checkout', component: Checkout, name: 'Checkout' },
 
+    // Backend
+
     { path: '/admin', component: Admin, name: 'Admin' },
-    { path: '/admin/product', component: ProductAdmin, name: 'ProductAdmin' },
+
+    { path: '/admin/product', component: AdminProductIndex, name: 'AdminProductIndex' },
+    { path: '/admin/product/create', component: AdminProductCreate, name: 'AdminProductCreate' },
+    { path: '/admin/product/edit/:id', component: AdminProductDetail, name: 'AdminProductDetail' },
     
+    { path: '/admin/blog', component: AdminBlogIndex, name: 'AdminBlogIndex' },
+    { path: '/admin/blog/create', component: AdminBlogCreate, name: 'AdminBlogCreate' },
+    { path: '/admin/blog/edit/:id', component: AdminBlogDetail, name: 'AdminBlogDetail' },
+    { path: '/admin/blog/comments', component: AdminBlogComments, name: 'AdminBlogComments' },
+
     { path: '/example', component: Example, name: 'Example' },
 
     { path: '*', component: NotFoundComponent, name: 'NotFoundComponent' }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ProductAttribute;
+use App\Models\ProductAttribute;
 use Illuminate\Http\Request;
 
 class ProductAttributeController extends Controller

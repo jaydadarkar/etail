@@ -53,16 +53,17 @@ export default {
             'v-footer': Footer
         },
         methods: {
-            register(){
-                    axios.post('/api/register', this.registerForm).then(response => {
+            async register(){
+                    await axios.post('/api/register', this.registerForm).then(response => {
                     this.$router.push({name: 'Dashboard'});                    
                     }).catch(error => {
                         this.error = error;
                     });
             }
         },
-        mounted(){
-            axios.get('/api/dashboard').then(response => {this.$router.push({name: 'Dashboard'})});
+        beforeCreate(){
+            axios.get('/api/dashboard')
+            .then(response => {this.$router.push({name: 'Dashboard'})});
         }
     }
 </script>

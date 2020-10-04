@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\QuickNote;
+use App\Models\QuickNote;
 use Illuminate\Http\Request;
+use Auth;
 
 class QuickNoteController extends Controller
 {
@@ -35,7 +36,17 @@ class QuickNoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(Auth::user()->role == "admin" || Auth::user()->role == "manager" || Auth::user()->role == "blogger"){
+            $note = QuickNote::create([
+                'user_id' => Auth::user()->id,
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+            return response()->json('Saved',200);
+        }
+        else{
+            return response()->json('Error',500);
+        }
     }
 
     /**
@@ -44,9 +55,15 @@ class QuickNoteController extends Controller
      * @param  \App\QuickNote  $quickNote
      * @return \Illuminate\Http\Response
      */
-    public function show(QuickNote $quickNote)
+    public function show(Request $request)
     {
-        //
+        if(Auth::user()->role == "admin" || Auth::user()->role == "manager" || Auth::user()->role == "blogger"){
+            $notes = QuickNote::where('user_id', Auth::user()->id)->get();
+            return response()->json($notes,200);
+        }
+        else{
+            return response()->json('Error',500);
+        }
     }
 
     /**
@@ -78,8 +95,14 @@ class QuickNoteController extends Controller
      * @param  \App\QuickNote  $quickNote
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuickNote $quickNote)
+    public function destroy(Request $request)
     {
-        //
+        if(Auth::user()->role == "admin" || Auth::user()->role == "manager" || Auth::user()->role == "blogger"){
+            $note = QuickNote::where('id',$request->id)->delete();
+            return response()->json('Deleted',200);
+        }
+        else{
+            return response()->json('Error',500);
+        }
     }
 }

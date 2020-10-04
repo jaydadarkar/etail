@@ -2,12 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\CustomResetPassword;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductController;
-use App\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,26 +14,79 @@ use App\Product;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/dashboard', function (Request $request) {
-    return $request->user();
+
+// ------------- Open Routes -------------
+
+Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/register', 'Auth\RegisterController@register')->name('register')->middleware('web');
+Route::post('/reset', 'Auth\CustomResetPassword@reset')->name('reset')->middleware('web');
+Route::post('/password/confirm', 'Auth\CustomResetPassword@resetPasswordWithToken')->name('confirm');
+
+Route::get('/product/get', 'ProductController@get')->name('product.get');
+
+// Auth Routes
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/dashboard', function (Request $request) {return $request->user();});
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::get('/checkout', function(){})->name('checkout');
+    Route::post('/checkout', function(){})->name('checkout');
+    Route::get('/orders', function(){})->name('orders');
+    Route::get('/orders/:id', function(){})->name('orders.get');
+    Route::get('/addresses', function(){})->name('addresses');
 });
 
-Route::post('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
-Route::post('/reset', [CustomResetPassword::class, 'reset'])->name('reset');
-Route::post('/password/confirm', [CustomResetPassword::class, 'resetPasswordWithToken'])->name('confirm');
-Route::middleware('auth:sanctum')->post('/logout', 'Auth\LoginController@logout')->name('logout');
+// ------------- Admin Routes -------------
+Route::group(['middleware' => ['auth', 'admin']], function () {
 
+    Route::get('/admin', function(){return response(200);})->name('admin');
 
-Route::middleware('auth:sanctum')->post('/admin', function(){
-    if (Auth::user()->role == "admin") {
-        return response()->json(['message' => 'admin'], 200);
-    }
-    else{
-        return response()->json('Unauthorized Access', 401);
-    }
-})->name('admin');
+    Route::get('/admin/settings', 'SettingController@get')->name('admin.settings');
+    Route::post('/admin/settings/update', 'SettingController@update')->name('admin.settings.update');
 
+    Route::get('/admin/affiliate', 'AffiliateController@get')->name('admin.settings');
+    Route::post('/admin/affiliate/update', 'AffiliateController@update')->name('admin.settings.update');
 
-Route::middleware('auth:sanctum')->post('/product/create/insert', 'ProductController@create');
-Route::get('/product/create/insert', 'ProductController@create');
+    Route::get('/admin/helpdesk', 'HelpdeskController@get')->name('admin.settings');
+    Route::get('/admin/helpdesk/:id', 'HelpdeskController@edit')->name('admin.settings');
+    Route::post('/admin/helpdesk/update', 'HelpdeskController@update')->name('admin.settings.update');
+
+});
+
+// ------------- Shop Manager -------------
+Route::group(['middleware' => ['auth', 'manager']], function(){
+
+    Route::get('/manager', function(){return response(200);})->name('admin');
+    Route::get('/admin/product', 'ProductController@get')->name('product.get');
+    Route::get('/admin/product/edit', 'ProductController@edit')->name('product.edit');
+    Route::post('/admin/product/store', 'ProductController@store')->name('product.store');
+    Route::post('/admin/product/update', 'ProductController@update')->name('product.update');
+    Route::post('/admin/product/delete', 'ProductController@delete')->name('product.delete');
+
+    Route::get('/admin/product-category', 'ProductCategoryController@get')->name('product.get');
+    Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product.edit');
+    Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product.store');
+    Route::post('/admin/product-category/update', 'ProductCategoryController@update')->name('product.update');
+    Route::post('/admin/product-category/delete', 'ProductCategoryController@delete')->name('product.delete');
+});
+
+// ------------- Blogger -------------
+Route::group(['middleware' => ['auth', 'blogger']], function(){
+
+    Route::get('/blogger', function(){return response(200);})->name('admin');
+    Route::get('/admin/blog', 'ProductController@edit')->name('product.edit');
+    Route::get('/admin/blog/edit/:id', 'ProductController@edit')->name('product.edit');
+    Route::post('/admin/blog/store', 'ProductController@store')->name('product.store');
+    Route::post('/admin/blog/update', 'ProductController@update')->name('product.update');
+    Route::post('/admin/blog/delete', 'ProductController@delete')->name('product.delete');
+
+});
+
+Route::get('/adminhome', function(Request $request){
+    if($request->user()->role == 'admin' || $request->user()->role == 'manager' || $request->user()->role == 'blogger') return response(200);
+    return response()->json('Unauthorized Access',401);
+})->middleware('auth');
+
+Route::post('/quicknote/create', 'QuickNoteController@store')->middleware('auth');
+Route::post('/quicknote/get', 'QuickNoteController@show')->middleware('auth');
+Route::post('/quicknote/delete', 'QuickNoteController@destroy')->middleware('auth');

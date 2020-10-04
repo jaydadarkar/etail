@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\BlogCategory;
+use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 
 class BlogCategoryController extends Controller

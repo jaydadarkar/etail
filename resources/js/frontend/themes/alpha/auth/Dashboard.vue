@@ -32,7 +32,7 @@ export default {
             'v-header': Header,
             'v-footer': Footer
         },
-        mounted(){
+        beforeCreate(){
             axios.get('/api/dashboard').then(response => {
                     this.user = response.data;
                 }).catch(error => {
