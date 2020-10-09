@@ -4,7 +4,7 @@
     <div class="row min-vh-100 flex-column flex-md-row">
         <sidebar></sidebar>
         <div class="col bg-faded my-3">
-            <h2>Welcome Admin,</h2><p>Helpdesk Detail</p>
+            <h2>Welcome Admin,</h2><p>Product Attributes</p>
             
         </div>
     </div>
@@ -19,7 +19,7 @@ export default {
         'sidebar': Sidebar
     },
     beforeCreate(){
-            axios.get('/api/admin')
+            axios.get('/api/manager')
             .then(response => {this.message = response.data.message})
             .catch(response =>{this.$router.push({name: 'Login'})});
         }

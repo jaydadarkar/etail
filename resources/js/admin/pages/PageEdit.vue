@@ -4,7 +4,7 @@
     <div class="row min-vh-100 flex-column flex-md-row">
         <sidebar></sidebar>
         <div class="col bg-faded my-3">
-            <h2>Welcome Admin,</h2><p>Helpdesk Detail</p>
+            <h2>Welcome Admin,</h2><p>Edit Page</p>
             
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ProductCategoryController extends Controller
 {
@@ -35,7 +36,19 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product_category = ProductCategory::create([
+            'product_category_name' => $request->product_category_name,
+            'product_category_slug' => $request->product_category_slug,
+            'product_category_desc' => $request->product_category_desc,
+            'product_cat_meta_keywords' => $request->product_cat_meta_keywords,
+            'product_cat_meta_desc' => $request->product_cat_meta_desc,
+            'product_cat_featured_image' => $request->product_cat_featured_image,
+            'product_cat_parent_id' => $request->product_cat_parent_id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        return response()->json($product_category , 200);
     }
 
     /**
@@ -46,7 +59,8 @@ class ProductCategoryController extends Controller
      */
     public function show(ProductCategory $productCategory)
     {
-        //
+        $productCategory = ProductCategory::get();
+        return response()->json($productCategory, 200);
     }
 
     /**

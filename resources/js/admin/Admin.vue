@@ -74,6 +74,8 @@
 
 <script>
 import Sidebar from './Sidebar';
+import { mapGetters } from 'vuex'
+
 export default {
     components: {
         'sidebar': Sidebar
@@ -84,13 +86,6 @@ export default {
                 title:"",
                 content:""
             },
-            notes:[
-                    id => '',
-                    title => '',
-                    content => '',
-                    created_at => '',
-                    updated_at => ''
-            ],
             todelete:{
                 id: ''
             }
@@ -101,24 +96,34 @@ export default {
             .then(response => {this.message = response.data.message})
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
+    computed: {
+          ...mapGetters({
+        notes: 'getNote',
+      }),
+    },
     methods:{
             async quicknote(){
                 await axios.post('/api/quicknote/create', this.quick)
-                .then(response => {console.log(response)})
+                .then(response => {
+                    this.$store.dispatch('updateNote');
+                    })
                 .catch(error => {console.log(error)});
+                this.quick.title = '';
+                this.quick.content  = '';
             },
             async deletenote(id){
                 this.todelete.id = id;
                 await axios.post('/api/quicknote/delete', this.todelete)
-                .then(response => {console.log(response)})
+                .then(response => {
+                    this.$store.dispatch('updateNote');
+                    })
                 .catch(error => {console.log(error)});
             }
         },
     mounted(){
         axios.post('/api/quicknote/get')
         .then(response => {
-            console.log(response);
-            this.notes = response.data;
+            this.$store.dispatch('updateNote');
         })
         .catch(error => {console.log(error)});
     }

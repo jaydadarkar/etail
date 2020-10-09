@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Events\UserRegisterEvent;
 
 class RegisterController extends Controller
 {
@@ -92,7 +93,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-
+        event(new UserRegisterEvent($user));
         return response()->json($user, 200);
     }
 }

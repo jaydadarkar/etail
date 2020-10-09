@@ -7,6 +7,7 @@
 require('./bootstrap');
 import { routes } from './routes';
 import VueRouter from 'vue-router';
+import { store } from './store/store';
 
 window.Vue = require('vue');
 
@@ -27,9 +28,6 @@ Vue.prototype.app_url = window.app_url;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -39,5 +37,6 @@ Vue.prototype.app_url = window.app_url;
 
 const app = new Vue({
     el: '#app',
+    store: store,
     router
 });

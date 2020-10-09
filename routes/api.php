@@ -63,11 +63,17 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
     Route::post('/admin/product/update', 'ProductController@update')->name('product.update');
     Route::post('/admin/product/delete', 'ProductController@delete')->name('product.delete');
 
-    Route::get('/admin/product-category', 'ProductCategoryController@get')->name('product.get');
-    Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product.edit');
-    Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product.store');
-    Route::post('/admin/product-category/update', 'ProductCategoryController@update')->name('product.update');
-    Route::post('/admin/product-category/delete', 'ProductCategoryController@delete')->name('product.delete');
+    Route::get('/admin/product-category', 'ProductCategoryController@show')->name('product-category.get');
+    Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product-category.edit');
+    Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product-category.store');
+    Route::post('/admin/product-category/update', 'ProductCategoryController@update')->name('product-category.update');
+    Route::post('/admin/product-category/delete', 'ProductCategoryController@delete')->name('product-category.delete');
+
+    Route::get('/admin/product-attributes', 'ProductAttributeController@get')->name('product-attributes.get');
+    Route::get('/admin/product-attributes/edit', 'ProductAttributeController@edit')->name('product-attributes.edit');
+    Route::post('/admin/product-attributes/store', 'ProductAttributeController@store')->name('product-attributes.store');
+    Route::post('/admin/product-attributes/update', 'ProductAttributeController@update')->name('product-attributes.update');
+    Route::post('/admin/product-attributes/delete', 'ProductAttributeController@delete')->name('product-attributes.delete');
 });
 
 // ------------- Blogger -------------
