@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ProductCategoryController extends Controller
 {
@@ -38,7 +39,7 @@ class ProductCategoryController extends Controller
     {
         $product_category = ProductCategory::create([
             'product_category_name' => $request->product_category_name,
-            'product_category_slug' => $request->product_category_slug,
+            'product_category_slug' => Str::of($request->product_category_slug)->slug('-'),
             'product_category_desc' => $request->product_category_desc,
             'product_cat_meta_keywords' => $request->product_cat_meta_keywords,
             'product_cat_meta_desc' => $request->product_cat_meta_desc,
@@ -92,8 +93,14 @@ class ProductCategoryController extends Controller
      * @param  \App\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $productCategory)
+    public function destroy(Request $request)
     {
-        //
+        try{
+        $note = ProductCategory::where('id',$request->id)->delete();
+            return response()->json('Deleted',200);
+        }
+        catch(Exception $e){
+            return response()->json($e, 422);
+        }
     }
 }

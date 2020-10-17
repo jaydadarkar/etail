@@ -67,7 +67,7 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
     Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product-category.edit');
     Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product-category.store');
     Route::post('/admin/product-category/update', 'ProductCategoryController@update')->name('product-category.update');
-    Route::post('/admin/product-category/delete', 'ProductCategoryController@delete')->name('product-category.delete');
+    Route::post('/admin/product-category/delete', 'ProductCategoryController@destroy')->name('product-category.delete');
 
     Route::get('/admin/product-attributes', 'ProductAttributeController@get')->name('product-attributes.get');
     Route::get('/admin/product-attributes/edit', 'ProductAttributeController@edit')->name('product-attributes.edit');

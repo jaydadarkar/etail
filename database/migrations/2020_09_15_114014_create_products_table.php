@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration
             $table->string('product_sku')->unique();
             $table->string('product_slug')->unique();
             $table->string('product_category');
+            $table->string('product_brand')->nullable();
             $table->string('product_variation')->nullable();
             $table->string('product_short_desc');
             $table->string('product_long_desc');
@@ -31,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->integer('product_featured')->nullable();
             $table->integer('product_published')->default(1);
             $table->string('product_tags')->nullable();
+            $table->string('product_dimensions')->nullable();
             $table->timestamps();
         });
     }

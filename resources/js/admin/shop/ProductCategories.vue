@@ -2,7 +2,7 @@
 <div>
     <div class="container-fluid">
     <div class="row min-vh-100 flex-column flex-md-row">
-        <sidebar></sidebar>
+        <sidebar></sidebar>        
         <div class="col bg-faded my-3">
             <h2>Welcome Admin,</h2><p>Product Categories</p>
             <div class="row">
@@ -36,7 +36,9 @@
                 <div class="col-md-6">
                     <div class="card w-100 mb-1" v-for="category in product_categories" :key="category.id">
                         <div class="card-header">
-                            <span class="material-icons" @click="deletecategory(category['id'])">delete</span>{{ category['product_category_name'] }}
+                            <span class="material-icons" @click="deletecategory(category['id'])">delete</span>
+                            <span class="material-icons" @click="showModal">edit</span>
+                            {{ category['product_category_name'] }}
                         </div>
                         <div class="card-body">
                             {{ category['product_category_desc'] }}
@@ -47,16 +49,19 @@
         </div>
     </div>
 </div>
+<modal v-show="isModalVisible" @close="closeModal" title="Samplde" body="SampleB"></modal>
 </div>
 </template>
 
 <script>
 import Sidebar from '../Sidebar';
+import Modal from '../Modal';
 import { mapGetters } from 'vuex'
 
 export default {
     components: {
-        'sidebar': Sidebar
+        'sidebar': Sidebar,
+        'modal' : Modal
     },
     data(){
         return{
@@ -71,7 +76,8 @@ export default {
             },
             todelete:{
                 id: ''
-            }
+            },
+            isModalVisible: false,
         }
     },
     beforeCreate(){
@@ -93,7 +99,6 @@ export default {
     },
     methods: {
         async createcategory (){
-            console.log(this.product_category);
             await axios.post('/api/admin/product-category/store', this.product_category).then(response => {
                     this.$store.dispatch('updateProductCategories');
                     })
@@ -105,7 +110,21 @@ export default {
                 this.product_category.product_cat_meta_desc = "";
                 this.product_category.product_cat_featured_image = "";
                 this.product_category.product_cat_parent_id = '';
-        }
+        },
+        async deletecategory(id){
+                this.todelete.id = id;
+                await axios.post('/api/admin/product-category/delete', this.todelete)
+                .then(response => {
+                    this.$store.dispatch('updateProductCategories');
+                    })
+                .catch(error => {console.log(error)});
+            },
+            showModal() {
+                this.isModalVisible = true;
+            },
+            closeModal() {
+                this.isModalVisible = false;
+            }
     }
 }
 </script>
