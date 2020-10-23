@@ -28,14 +28,15 @@
           id="modalDescription"
         >
           <slot name="body">
-            {{ body }}
+            <form v-html="body" v-bind:id="modalForm" ref="modalForm"></form>
           </slot>
         </section>
         <footer class="modal-footer">
           <slot name="footer">
             <button
               type="button"
-              class="btn-green"              
+              class="btn-green"
+              @click="submit(url,state)"
               aria-label="Save"
             >
               Save
@@ -58,12 +59,27 @@
 <script>
   export default {
     name: 'modal',
+    data(){
+      return {
+        modalForm: 'modalForm'
+      }
+    },
     props: 
-      ['title', 'body'],
+      ['title', 'body', 'url', 'state'],
     methods: {
       close() {
         this.$emit('close');
       },
+      submit(url, state){
+        let formData = new FormData(this.$refs.modalForm);
+         let dataa = {};
+         for (let [key, val] of formData.entries()) {
+               Object.assign(dataa, {[key]: val})
+         }
+        axios.post(url,dataa).then(response => {
+          if(state != undefined && state != '') this.$store.dispatch(state)
+          }).catch(error => {console.log(error)});
+      }
     },
   };
 </script>

@@ -37,7 +37,7 @@
                     <div class="card w-100 mb-1" v-for="category in product_categories" :key="category.id">
                         <div class="card-header">
                             <span class="material-icons" @click="deletecategory(category['id'])">delete</span>
-                            <span class="material-icons" @click="showModal">edit</span>
+                            <span class="material-icons" @click="showModal(category)">edit</span>
                             {{ category['product_category_name'] }}
                         </div>
                         <div class="card-body">
@@ -49,7 +49,7 @@
         </div>
     </div>
 </div>
-<modal v-show="isModalVisible" @close="closeModal" title="Samplde" body="SampleB"></modal>
+<modal v-show="isModalVisible" @close="closeModal" title="Edit Product Category" v-bind:body="this.categoryForm" url="/api/admin/product-category/update" state="updateProductCategories"></modal>
 </div>
 </template>
 
@@ -78,6 +78,8 @@ export default {
                 id: ''
             },
             isModalVisible: false,
+            activeCategory: {},
+            categoryForm: ''
         }
     },
     beforeCreate(){
@@ -109,7 +111,7 @@ export default {
                 this.product_category.product_cat_meta_keywords = "";
                 this.product_category.product_cat_meta_desc = "";
                 this.product_category.product_cat_featured_image = "";
-                this.product_category.product_cat_parent_id = '';
+                this.product_category.product_cat_parent_id = "";
         },
         async deletecategory(id){
                 this.todelete.id = id;
@@ -119,8 +121,17 @@ export default {
                     })
                 .catch(error => {console.log(error)});
             },
-            showModal() {
+            showModal(category) {
                 this.isModalVisible = true;
+                this.categoryForm = `
+                <input class='form-control' type='hidden' value="${category["id"]}" name='id' />
+                <input class='form-control' type='text' value="${category["product_category_name"]}" name='product_category_name' />
+                <input class='form-control' type='text' value="${category["product_category_slug"]}" name='product_category_slug' />
+                <textarea class='form-control' name='product_category_desc'>${category["product_category_desc"]}</textarea>
+                <input class='form-control' type='text' value="${category["product_cat_meta_keywords"]}" name='product_cat_meta_keywords' />
+                <input class='form-control' type='text' value="${category["product_cat_meta_desc"]}" name='product_cat_meta_desc' />
+                <input class='form-control' type='text' value="${category["product_cat_featured_image"]}" name='product_cat_featured_image' />
+                <input class='form-control' type='text' value="${category["product_cat_parent_id"]}" name='product_cat_parent_id' />`;
             },
             closeModal() {
                 this.isModalVisible = false;

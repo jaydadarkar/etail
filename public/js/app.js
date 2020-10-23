@@ -2116,6 +2116,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
 //
 //
 //
@@ -2175,10 +2192,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'modal',
-  props: ['title', 'body'],
+  data: function data() {
+    return {
+      modalForm: 'modalForm'
+    };
+  },
+  props: ['title', 'body', 'url', 'state'],
   methods: {
     close: function close() {
       this.$emit('close');
+    },
+    submit: function submit(url, state) {
+      var _this = this;
+
+      var formData = new FormData(this.$refs.modalForm);
+      var dataa = {};
+
+      var _iterator = _createForOfIteratorHelper(formData.entries()),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _step$value = _slicedToArray(_step.value, 2),
+              key = _step$value[0],
+              val = _step$value[1];
+
+          Object.assign(dataa, _defineProperty({}, key, val));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      axios.post(url, dataa).then(function (response) {
+        if (state != undefined && state != '') _this.$store.dispatch(state);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });
@@ -3167,7 +3218,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       todelete: {
         id: ''
       },
-      isModalVisible: false
+      isModalVisible: false,
+      activeCategory: {},
+      categoryForm: ''
     };
   },
   beforeCreate: function beforeCreate() {
@@ -3216,7 +3269,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this3.product_category.product_cat_meta_keywords = "";
                 _this3.product_category.product_cat_meta_desc = "";
                 _this3.product_category.product_cat_featured_image = "";
-                _this3.product_category.product_cat_parent_id = '';
+                _this3.product_category.product_cat_parent_id = "";
 
               case 9:
               case "end":
@@ -3250,8 +3303,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2);
       }))();
     },
-    showModal: function showModal() {
+    showModal: function showModal(category) {
       this.isModalVisible = true;
+      this.categoryForm = "\n                <input class='form-control' type='hidden' value=\"".concat(category["id"], "\" name='id' />\n                <input class='form-control' type='text' value=\"").concat(category["product_category_name"], "\" name='product_category_name' />\n                <input class='form-control' type='text' value=\"").concat(category["product_category_slug"], "\" name='product_category_slug' />\n                <textarea class='form-control' name='product_category_desc'>").concat(category["product_category_desc"], "</textarea>\n                <input class='form-control' type='text' value=\"").concat(category["product_cat_meta_keywords"], "\" name='product_cat_meta_keywords' />\n                <input class='form-control' type='text' value=\"").concat(category["product_cat_meta_desc"], "\" name='product_cat_meta_desc' />\n                <input class='form-control' type='text' value=\"").concat(category["product_cat_featured_image"], "\" name='product_cat_featured_image' />\n                <input class='form-control' type='text' value=\"").concat(category["product_cat_parent_id"], "\" name='product_cat_parent_id' />");
     },
     closeModal: function closeModal() {
       this.isModalVisible = false;
@@ -43074,7 +43128,11 @@ var render = function() {
             { staticClass: "modal-body", attrs: { id: "modalDescription" } },
             [
               _vm._t("body", [
-                _vm._v("\n          " + _vm._s(_vm.body) + "\n        ")
+                _c("form", {
+                  ref: "modalForm",
+                  attrs: { id: _vm.modalForm },
+                  domProps: { innerHTML: _vm._s(_vm.body) }
+                })
               ])
             ],
             2
@@ -43089,7 +43147,12 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn-green",
-                    attrs: { type: "button", "aria-label": "Save" }
+                    attrs: { type: "button", "aria-label": "Save" },
+                    on: {
+                      click: function($event) {
+                        return _vm.submit(_vm.url, _vm.state)
+                      }
+                    }
                   },
                   [_vm._v("\n            Save\n          ")]
                 ),
@@ -44717,7 +44780,11 @@ var render = function() {
                             "span",
                             {
                               staticClass: "material-icons",
-                              on: { click: _vm.showModal }
+                              on: {
+                                click: function($event) {
+                                  return _vm.showModal(category)
+                                }
+                              }
                             },
                             [_vm._v("edit")]
                           ),
@@ -44756,7 +44823,12 @@ var render = function() {
             expression: "isModalVisible"
           }
         ],
-        attrs: { title: "Samplde", body: "SampleB" },
+        attrs: {
+          title: "Edit Product Category",
+          body: this.categoryForm,
+          url: "/api/admin/product-category/update",
+          state: "updateProductCategories"
+        },
         on: { close: _vm.closeModal }
       })
     ],

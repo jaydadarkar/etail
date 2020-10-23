@@ -82,9 +82,19 @@ class ProductCategoryController extends Controller
      * @param  \App\ProductCategory  $productCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCategory $productCategory)
+    public function update(Request $request)
     {
-        //
+        if($request->product_cat_parent_id == "null") $request->product_cat_parent_id = null;
+        ProductCategory::where('id', $request->id)->update([
+            "product_category_name" => $request->product_category_name,
+            "product_category_slug" => $request->product_category_slug,
+            "product_category_desc" => $request->product_category_desc,
+            "product_cat_meta_keywords" => $request->product_cat_meta_keywords,
+            "product_cat_meta_desc" => $request->product_cat_meta_desc,
+            "product_cat_featured_image" => $request->product_cat_featured_image,
+            "product_cat_parent_id" => $request->product_cat_parent_id
+        ]);
+        return response()->json('Product Category Updated',200);
     }
 
     /**
