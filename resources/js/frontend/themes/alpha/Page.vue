@@ -1,17 +1,9 @@
 <template>
 <div>
     <v-header></v-header>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Page</div>
-
-                    <div class="card-body">
-                        I'm in page.
-                    </div>
-                </div>
-            </div>
+    <div class="container-fluid">
+        <div class="row">
+            <span v-html="content"></span>
         </div>
     </div>
     <v-footer></v-footer>
@@ -27,5 +19,16 @@ export default {
             'v-header': Header,
             'v-footer': Footer
         },
+        data(){
+            return{
+                content: '',
+                slug: this.$route.params.page_name
+            }
+        },
+        mounted(){
+            axios.get('/api/page/' + this.slug).then(response => {
+                this.content = response.data.page_content
+            }).catch();
+        }
     }
 </script>

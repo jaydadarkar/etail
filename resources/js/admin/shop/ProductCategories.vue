@@ -78,7 +78,6 @@ export default {
                 id: ''
             },
             isModalVisible: false,
-            activeCategory: {},
             categoryForm: ''
         }
     },

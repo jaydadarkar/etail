@@ -92,7 +92,8 @@ class ProductCategoryController extends Controller
             "product_cat_meta_keywords" => $request->product_cat_meta_keywords,
             "product_cat_meta_desc" => $request->product_cat_meta_desc,
             "product_cat_featured_image" => $request->product_cat_featured_image,
-            "product_cat_parent_id" => $request->product_cat_parent_id
+            "product_cat_parent_id" => $request->product_cat_parent_id,
+            "updated_at" => now()
         ]);
         return response()->json('Product Category Updated',200);
     }

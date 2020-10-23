@@ -14,7 +14,8 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        $pages = Page::get();
+        return response()->json($pages, 200);
     }
 
     /**
@@ -35,7 +36,17 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Page::create([
+            'page_title' => $request->page_title,
+            'page_slug' => $request->page_slug,
+            'page_content' => $request->page_content,
+            'page_meta_keywords' => $request->page_meta_keywords,
+            'page_meta_desc' => $request->page_meta_desc,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        return response()->json("Page Created", 200);
     }
 
     /**
@@ -44,9 +55,11 @@ class PageController extends Controller
      * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function show(Page $page)
+    public function show(Request $request)
     {
-        //
+        $page = Page::where('page_slug', $request->slug)->first();
+
+        return response()->json($page, 200);
     }
 
     /**
@@ -69,7 +82,16 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        //
+        Page::where('id', $request->id)->update([
+            'page_title' => $request->page_title,
+            'page_slug' => $request->page_slug,
+            'page_content' => $request->page_content,
+            'page_meta_keywords' => $request->page_meta_keywords,
+            'page_meta_desc' => $request->page_meta_desc,
+            'updated_at' => now()
+        ]);
+
+        return response()->json("Page Updated", 200);
     }
 
     /**
@@ -78,8 +100,14 @@ class PageController extends Controller
      * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Page $page)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $page = Page::where('id',$request->id)->delete();
+                return response()->json('Deleted',200);
+            }
+            catch(Exception $e){
+                return response()->json($e, 422);
+            }
     }
 }

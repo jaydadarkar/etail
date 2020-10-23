@@ -22,7 +22,11 @@ Route::post('/register', 'Auth\RegisterController@register')->name('register')->
 Route::post('/reset', 'Auth\CustomResetPassword@reset')->name('reset')->middleware('web');
 Route::post('/password/confirm', 'Auth\CustomResetPassword@resetPasswordWithToken')->name('confirm');
 
-Route::get('/product/get', 'ProductController@get')->name('product.get');
+Route::get('/product/get', 'ProductController@index')->name('product.get');
+Route::get('/pages/get', 'PageController@index')->name('pages.get');
+Route::get('/page/{slug}', 'PageController@show')->name('pages.show');
+Route::get('/posts/get', 'BlogController@index')->name('posts.get');
+Route::get('/posts/{slug}', 'BlogController@show')->name('posts.show');
 
 // Auth Routes
 Route::group(['middleware' => 'auth'], function () {
@@ -51,6 +55,9 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/helpdesk/:id', 'HelpdeskController@edit')->name('admin.settings');
     Route::post('/admin/helpdesk/update', 'HelpdeskController@update')->name('admin.settings.update');
 
+    Route::post('/admin/pages/create', 'PageController@store')->name('pages.store');
+    Route::post('/admin/pages/update', 'PageController@update')->name('pages.update');
+    Route::post('/admin/pages/delete', 'PageController@destroy')->name('pages.delete');
 });
 
 // ------------- Shop Manager -------------

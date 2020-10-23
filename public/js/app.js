@@ -2787,10 +2787,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      page: {
+        page_title: '',
+        page_slug: '',
+        page_content: '',
+        page_meta_keywords: '',
+        page_meta_desc: ''
+      }
+    };
   },
   beforeCreate: function beforeCreate() {
     var _this = this;
@@ -2802,6 +2835,19 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Login'
       });
     });
+  },
+  methods: {
+    createpage: function createpage() {
+      var _this2 = this;
+
+      axios.post('/api/admin/pages/create', this.page).then(function (response) {
+        _this2.$router.push({
+          name: 'AdminPageIndex'
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -2861,6 +2907,15 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/admin/Sidebar.vue");
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Modal */ "./resources/js/admin/Modal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2876,9 +2931,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
+    'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"],
+    'modal': _Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      pages: {
+        id: '',
+        page_title: '',
+        page_slug: '',
+        page_content: '',
+        page_meta_keywords: '',
+        page_meta_desc: '',
+        created_at: '',
+        updated_at: ''
+      },
+      todelete: {
+        id: ''
+      },
+      isModalVisible: false,
+      pageForm: ''
+    };
   },
   beforeCreate: function beforeCreate() {
     var _this = this;
@@ -2890,6 +2966,32 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Login'
       });
     });
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    axios.get('/api/pages/get').then(function (response) {
+      _this2.pages = response.data;
+    })["catch"](function (error) {
+      return console.log(error);
+    });
+  },
+  methods: {
+    showModal: function showModal(page) {
+      this.isModalVisible = true;
+      this.pageForm = "\n                <input class='form-control' type='hidden' value=\"".concat(page["id"], "\" name='id' />\n                <input class='form-control' type='text' value=\"").concat(page["page_title"], "\" name='page_title' />\n                <input class='form-control' type='text' value=\"").concat(page["page_slug"], "\" name='page_slug' />\n                <textarea class='form-control' name='page_content'>").concat(page["page_content"], "</textarea>\n                <input class='form-control' type='text' value=\"").concat(page["page_meta_keywords"], "\" name='page_meta_keywords' />\n                <input class='form-control' type='text' value=\"").concat(page["page_meta_desc"], "\" name='page_meta_desc' />");
+    },
+    closeModal: function closeModal() {
+      this.isModalVisible = false;
+    },
+    deletepage: function deletepage(id) {
+      this.todelete.id = id;
+      axios.post('/api/admin/pages/delete', this.todelete).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -3219,7 +3321,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: ''
       },
       isModalVisible: false,
-      activeCategory: {},
       categoryForm: ''
     };
   },
@@ -4189,20 +4290,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'v-header': _components_Header__WEBPACK_IMPORTED_MODULE_0__["default"],
     'v-footer': _components_Footer__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      content: '',
+      slug: this.$route.params.page_name
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/page/' + this.slug).then(function (response) {
+      _this.content = response.data.page_content;
+    })["catch"]();
   }
 });
 
@@ -44137,23 +44243,195 @@ var render = function() {
       _c(
         "div",
         { staticClass: "row min-vh-100 flex-column flex-md-row" },
-        [_c("sidebar"), _vm._v(" "), _vm._m(0)],
+        [
+          _c("sidebar"),
+          _vm._v(" "),
+          _c("div", { staticClass: "col bg-faded my-3" }, [
+            _c("h2", [_vm._v("Welcome Admin,")]),
+            _c("p", [_vm._v("Create New Page")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-12" }, [
+                _c("h4", [_vm._v("Create A Page")]),
+                _vm._v(" "),
+                _c("form", [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page.page_title,
+                          expression: "page.page_title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "product_category_name",
+                        placeholder: "Page Name"
+                      },
+                      domProps: { value: _vm.page.page_title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.page, "page_title", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page.page_slug,
+                          expression: "page.page_slug"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "product_category_slug",
+                        placeholder: "Page Slug"
+                      },
+                      domProps: { value: _vm.page.page_slug },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.page, "page_slug", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page.page_content,
+                          expression: "page.page_content"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "product_category_desc",
+                        rows: "3",
+                        placeholder: "Page Desc"
+                      },
+                      domProps: { value: _vm.page.page_content },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.page,
+                            "page_content",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page.page_meta_keywords,
+                          expression: "page.page_meta_keywords"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "product_cat_meta_keywords",
+                        placeholder: "Page Meta Keywords"
+                      },
+                      domProps: { value: _vm.page.page_meta_keywords },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.page,
+                            "page_meta_keywords",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.page.page_meta_desc,
+                          expression: "page.page_meta_desc"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "product_cat_meta_desc",
+                        placeholder: "Page Meta Desc"
+                      },
+                      domProps: { value: _vm.page.page_meta_desc },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.page,
+                            "page_meta_desc",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.createpage()
+                        }
+                      }
+                    },
+                    [_vm._v("Create")]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ],
         1
       )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col bg-faded my-3" }, [
-      _c("h2", [_vm._v("Welcome Admin,")]),
-      _c("p", [_vm._v("Create New Page")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -44218,28 +44496,97 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "container-fluid" }, [
-      _c(
-        "div",
-        { staticClass: "row min-vh-100 flex-column flex-md-row" },
-        [_c("sidebar"), _vm._v(" "), _vm._m(0)],
-        1
-      )
-    ])
-  ])
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c(
+          "div",
+          { staticClass: "row min-vh-100 flex-column flex-md-row" },
+          [
+            _c("sidebar"),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col bg-faded my-3" },
+              [
+                _c("h2", [_vm._v("Welcome Admin,")]),
+                _c("p", [_vm._v("Pages")]),
+                _vm._v(" "),
+                _vm._l(_vm.pages, function(page) {
+                  return _c(
+                    "div",
+                    { key: page.id, staticClass: "col-12 m-1" },
+                    [
+                      _c("div", { staticClass: "card-header" }, [
+                        _c(
+                          "span",
+                          {
+                            staticClass: "material-icons",
+                            on: {
+                              click: function($event) {
+                                return _vm.deletepage(page["id"])
+                              }
+                            }
+                          },
+                          [_vm._v("delete")]
+                        ),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "material-icons",
+                            on: {
+                              click: function($event) {
+                                return _vm.showModal(page)
+                              }
+                            }
+                          },
+                          [_vm._v("edit")]
+                        ),
+                        _vm._v(
+                          _vm._s(page["page_title"]) + "\n                "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-body" }, [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(page["page_content"]) +
+                            "\n                "
+                        )
+                      ])
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("modal", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isModalVisible,
+            expression: "isModalVisible"
+          }
+        ],
+        attrs: {
+          title: "Edit Page",
+          body: this.pageForm,
+          url: "/api/admin/pages/update"
+        },
+        on: { close: _vm.closeModal }
+      })
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col bg-faded my-3" }, [
-      _c("h2", [_vm._v("Welcome Admin,")]),
-      _c("p", [_vm._v("Pages")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -46451,32 +46798,21 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [_c("v-header"), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("v-footer")],
+    [
+      _c("v-header"),
+      _vm._v(" "),
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("span", { domProps: { innerHTML: _vm._s(_vm.content) } })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("v-footer")
+    ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Page")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                        I'm in page.\n                    "
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
