@@ -17,6 +17,7 @@
                         <select name="type" id="type" class="form-control">
                         <option value="simple">Simple</option>
                         <option value="variable">Variable</option>
+                        <option value="variable">Affiliate</option>
                         </select></div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -75,14 +76,9 @@
                 <div class="card">
                     <div class="card-header p-1">Category</div>
                     <div class="card-body">
-                    <input type="checkbox" id="t-shirt" name="t-shirt" value="t-shirt">
-                    <label for="t-shirt"> T-shirt</label><br>
-                    <input type="checkbox" id="Jeans" name="jeans" value="jeans">
-                    <label for="jeans"> Jeans</label><br>
-                    <input type="checkbox" id="shirt" name="shirt" value="shirt">
-                    <label for="shirt"> Shirt</label><br>
-                    <input type="checkbox" id="trouser" name="trouser" value="trouser">
-                    <label for="trouser"> Trouser</label><br>
+                        <div v-for="cat in category" :key="cat.id">
+                            <input type="checkbox" v-bind:value="cat.id" name="product_category"><label> {{ cat.product_category_name }}</label><br>
+                        </div>
                     </div>
                 </div>
                 <br />
@@ -97,12 +93,20 @@
                 </div>
                 <br />
                 <div class="card">
-                    <div class="card-header p-1">Main Image</div>
+                    <div class="card-header p-1">Secondary Images</div>
                     <div class="card-body row">
                         <br />                        
                     </div>
                     <div class="card-footer">
                         <a class="btn btn-primary">Select Images</a>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header p-1">Featured Product</div>
+                    <div class="card-body row">
+                        <br />                        
+                        <input type="checkbox" name="featured"><label> Featured Product</label><br>
                     </div>
                 </div>
             </div>
@@ -128,6 +132,10 @@ export default {
                 quantity: 1,
                 description: '',
                 tags: '',
+            },
+            category: {
+                id: '',
+                product_category_name: ''
             }
         }
     },
@@ -136,6 +144,11 @@ export default {
             .then(response => {this.message = response.data.message})
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
+    mounted(){
+        axios.get('/api/product-category/get').then(response => {
+            this.category = response.data;
+        }).catch(error => {console.log(error)});
+    },
     methods: {
         async createproduct(){
             await axios.post('/api/product/create/insert', this.product).then(response => {

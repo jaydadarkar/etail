@@ -69,7 +69,7 @@ export const store = new Vuex.Store({
       },
       updateProductCategories: ({ commit }) => {
         setTimeout(() => {
-          axios.get('/api/admin/product-category')
+          axios.get('/api/product-category/get')
         .then(response => {commit('updateProductCategoriesM', response.data)})
         .catch(error => console.log(error));
         }, 2);

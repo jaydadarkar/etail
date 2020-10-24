@@ -2743,10 +2743,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      folders: [],
+      files: [],
+      toUploadFile: {
+        directoryName: '',
+        file: undefined
+      },
+      createFolder: ''
+    };
   },
   beforeCreate: function beforeCreate() {
     var _this = this;
@@ -2758,6 +2812,53 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Login'
       });
     });
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    axios.get('/api/media/get').then(function (response) {
+      _this2.folders = response.data.dirNames;
+      _this2.files = response.data.filesArr;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  methods: {
+    uploadFile: function uploadFile() {
+      var mypostparameters = new FormData();
+      mypostparameters.append('file', this.toUploadFile.file);
+      mypostparameters.append('directoryName', this.toUploadFile.directoryName);
+      axios.post('/api/media/store', mypostparameters).then(function (response) {})["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    Images_onFileChanged: function Images_onFileChanged(event) {
+      this.toUploadFile.file = event.target.files[0];
+    },
+    insideFolder: function insideFolder(folderName) {
+      var _this3 = this;
+
+      if (this.toUploadFile.directoryName != '') {
+        this.toUploadFile.directoryName += '/' + folderName;
+      } else {
+        this.toUploadFile.directoryName += folderName;
+      }
+
+      axios.get('/api/media/get/?folder=' + this.toUploadFile.directoryName).then(function (response) {
+        _this3.folders = response.data.dirNames;
+        _this3.files = response.data.filesArr;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    newFolder: function newFolder() {
+      axios.post('/api/media/createFolder', {
+        currentFolder: this.toUploadFile.directoryName,
+        newFolder: this.createFolder
+      }).then(function (response) {})["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -3338,7 +3439,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   mounted: function mounted() {
     var _this2 = this;
 
-    axios.get('/api/admin/product-category').then(function (response) {
+    axios.get('/api/product-category/get').then(function (response) {
       _this2.$store.dispatch('updateProductCategories');
     })["catch"](function (error) {
       console.log(error);
@@ -3549,6 +3650,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3563,6 +3668,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         quantity: 1,
         description: '',
         tags: ''
+      },
+      category: {
+        id: '',
+        product_category_name: ''
       }
     };
   },
@@ -3577,9 +3686,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     });
   },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    axios.get('/api/product-category/get').then(function (response) {
+      _this2.category = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
   methods: {
     createproduct: function createproduct() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -3587,8 +3705,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.post('/api/product/create/insert', _this2.product).then(function (response) {})["catch"](function (error) {
-                  _this2.error = error;
+                return axios.post('/api/product/create/insert', _this3.product).then(function (response) {})["catch"](function (error) {
+                  _this3.error = error;
                 });
 
               case 2:
@@ -44200,23 +44318,200 @@ var render = function() {
       _c(
         "div",
         { staticClass: "row min-vh-100 flex-column flex-md-row" },
-        [_c("sidebar"), _vm._v(" "), _vm._m(0)],
+        [
+          _c("sidebar"),
+          _vm._v(" "),
+          _c("div", { staticClass: "col bg-faded my-3" }, [
+            _c("h2", [_vm._v("Welcome Admin,")]),
+            _c("p", [_vm._v("Media")]),
+            _vm._v(" "),
+            _c("span", [
+              _vm._v("public/storage/" + _vm._s(_vm.toUploadFile.directoryName))
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "container" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("div", { staticClass: "input-group mb-3" }, [
+                      _c(
+                        "input",
+                        _vm._b(
+                          {
+                            staticClass: "form-control",
+                            attrs: {
+                              type: "file",
+                              name: "file",
+                              id: "file",
+                              "aria-describedby": "file-upload"
+                            },
+                            on: { change: _vm.Images_onFileChanged }
+                          },
+                          "input",
+                          _vm.toUploadFile.file,
+                          false
+                        )
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group-append" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { id: "file-upload" },
+                            on: {
+                              click: function($event) {
+                                return _vm.uploadFile()
+                              }
+                            }
+                          },
+                          [_vm._v("Upload")]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("div", { staticClass: "input-group mb-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.createFolder,
+                            expression: "createFolder"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          name: "createFolder",
+                          id: "createFolder",
+                          "aria-describedby": "folder-create"
+                        },
+                        domProps: { value: _vm.createFolder },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.createFolder = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group-append" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { id: "folder-create" },
+                            on: {
+                              click: function($event) {
+                                return _vm.newFolder()
+                              }
+                            }
+                          },
+                          [_vm._v("Create A Folder")]
+                        )
+                      ])
+                    ])
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.folders, function(folder) {
+                    return _c(
+                      "div",
+                      {
+                        key: folder,
+                        staticClass: "col-lg-3 col-md-3 col-sm-4 align-center"
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-dark folder-wrap",
+                            attrs: { role: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.insideFolder(folder)
+                              }
+                            }
+                          },
+                          [
+                            _c("span", {
+                              staticClass:
+                                "glyphicon glyphicon-folder-open folderIcons"
+                            }),
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(folder) +
+                                "\n                            "
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.files, function(file) {
+                    return _c(
+                      "div",
+                      { key: file["name"], staticClass: "col-12" },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-link text-dark",
+                            attrs: { href: file["fileUrl"] }
+                          },
+                          [
+                            _c("img", {
+                              attrs: {
+                                src: file["fileUrl"],
+                                alt: "",
+                                width: "150px"
+                              }
+                            }),
+                            _c("br"),
+                            _vm._v(" "),
+                            _c("span", {
+                              staticClass:
+                                "glyphicon glyphicon-file folderIcons"
+                            }),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "file-name" }, [
+                              _vm._v(_vm._s(file["fileName"]))
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ])
+        ],
         1
       )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col bg-faded my-3" }, [
-      _c("h2", [_vm._v("Welcome Admin,")]),
-      _c("p", [_vm._v("Media")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -45531,6 +45826,32 @@ var render = function() {
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "card-header p-1" }, [
+                    _vm._v("Category")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    _vm._l(_vm.category, function(cat) {
+                      return _c("div", { key: cat.id }, [
+                        _c("input", {
+                          attrs: { type: "checkbox", name: "product_category" },
+                          domProps: { value: cat.id }
+                        }),
+                        _c("label", [
+                          _vm._v(" " + _vm._s(cat.product_category_name))
+                        ]),
+                        _c("br")
+                      ])
+                    }),
+                    0
+                  )
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
                 _vm._m(4),
                 _vm._v(" "),
                 _c("br"),
@@ -45569,7 +45890,9 @@ var staticRenderFns = [
         [
           _c("option", { attrs: { value: "simple" } }, [_vm._v("Simple")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "variable" } }, [_vm._v("Variable")])
+          _c("option", { attrs: { value: "variable" } }, [_vm._v("Variable")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "variable" } }, [_vm._v("Affiliate")])
         ]
       )
     ])
@@ -45604,64 +45927,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header p-1" }, [_vm._v("Category")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("input", {
-          attrs: {
-            type: "checkbox",
-            id: "t-shirt",
-            name: "t-shirt",
-            value: "t-shirt"
-          }
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "t-shirt" } }, [_vm._v(" T-shirt")]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          attrs: {
-            type: "checkbox",
-            id: "Jeans",
-            name: "jeans",
-            value: "jeans"
-          }
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "jeans" } }, [_vm._v(" Jeans")]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          attrs: {
-            type: "checkbox",
-            id: "shirt",
-            name: "shirt",
-            value: "shirt"
-          }
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "shirt" } }, [_vm._v(" Shirt")]),
-        _c("br"),
-        _vm._v(" "),
-        _c("input", {
-          attrs: {
-            type: "checkbox",
-            id: "trouser",
-            name: "trouser",
-            value: "trouser"
-          }
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "trouser" } }, [_vm._v(" Trouser")]),
-        _c("br")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header p-1" }, [_vm._v("Main Image")]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [_c("br")]),
@@ -45676,12 +45941,32 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header p-1" }, [_vm._v("Main Image")]),
+      _c("div", { staticClass: "card-header p-1" }, [
+        _vm._v("Secondary Images")
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body row" }, [_c("br")]),
       _vm._v(" "),
       _c("div", { staticClass: "card-footer" }, [
         _c("a", { staticClass: "btn btn-primary" }, [_vm._v("Select Images")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header p-1" }, [
+        _vm._v("Featured Product")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body row" }, [
+        _c("br"),
+        _vm._v(" "),
+        _c("input", { attrs: { type: "checkbox", name: "featured" } }),
+        _c("label", [_vm._v(" Featured Product")]),
+        _c("br")
       ])
     ])
   }
@@ -70204,7 +70489,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     updateProductCategories: function updateProductCategories(_ref4) {
       var commit = _ref4.commit;
       setTimeout(function () {
-        axios.get('/api/admin/product-category').then(function (response) {
+        axios.get('/api/product-category/get').then(function (response) {
           commit('updateProductCategoriesM', response.data);
         })["catch"](function (error) {
           return console.log(error);

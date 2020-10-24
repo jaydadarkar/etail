@@ -16,7 +16,8 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $pc = ProductCategory::get();
+        return response()->json($pc, 200);
     }
 
     /**

@@ -23,6 +23,7 @@ Route::post('/reset', 'Auth\CustomResetPassword@reset')->name('reset')->middlewa
 Route::post('/password/confirm', 'Auth\CustomResetPassword@resetPasswordWithToken')->name('confirm');
 
 Route::get('/product/get', 'ProductController@index')->name('product.get');
+Route::get('/product-category/get', 'ProductCategoryController@index')->name('product-category.get');
 Route::get('/pages/get', 'PageController@index')->name('pages.get');
 Route::get('/page/{slug}', 'PageController@show')->name('pages.show');
 Route::get('/posts/get', 'BlogController@index')->name('posts.get');
@@ -70,7 +71,6 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
     Route::post('/admin/product/update', 'ProductController@update')->name('product.update');
     Route::post('/admin/product/delete', 'ProductController@delete')->name('product.delete');
 
-    Route::get('/admin/product-category', 'ProductCategoryController@show')->name('product-category.get');
     Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product-category.edit');
     Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product-category.store');
     Route::post('/admin/product-category/update', 'ProductCategoryController@update')->name('product-category.update');
@@ -103,3 +103,8 @@ Route::get('/adminhome', function(Request $request){
 Route::post('/quicknote/create', 'QuickNoteController@store')->middleware('auth');
 Route::post('/quicknote/get', 'QuickNoteController@show')->middleware('auth');
 Route::post('/quicknote/delete', 'QuickNoteController@destroy')->middleware('auth');
+
+Route::get('/media/get/{folder?}', 'MediaController@index')->middleware('auth');
+Route::post('/media/store', 'MediaController@store')->middleware('auth');
+Route::post('/media/createFolder', 'MediaController@createFolder')->middleware('auth');
+Route::post('/media/delete', 'MediaController@delete')->middleware('auth');

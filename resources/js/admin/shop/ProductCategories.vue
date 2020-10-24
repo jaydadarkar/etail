@@ -87,7 +87,7 @@ export default {
             .catch(response =>{this.$router.push({name: 'Login'})});
     },
     mounted(){
-        axios.get('/api/admin/product-category')
+        axios.get('/api/product-category/get')
         .then(response => {
             this.$store.dispatch('updateProductCategories');
         })
