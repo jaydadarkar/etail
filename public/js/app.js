@@ -2729,6 +2729,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/admin/Sidebar.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2787,14 +2800,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
-      folders: [],
-      files: [],
       toUploadFile: {
         directoryName: '',
         file: undefined
@@ -2802,6 +2814,10 @@ __webpack_require__.r(__webpack_exports__);
       createFolder: ''
     };
   },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+    folders: 'getMediaFolders',
+    files: 'getMediaFiles'
+  })),
   beforeCreate: function beforeCreate() {
     var _this = this;
 
@@ -2814,21 +2830,22 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   mounted: function mounted() {
-    var _this2 = this;
-
-    axios.get('/api/media/get').then(function (response) {
-      _this2.folders = response.data.dirNames;
-      _this2.files = response.data.filesArr;
-    })["catch"](function (error) {
-      console.log(error);
+    this.$store.dispatch('updateMedia', {
+      folder: this.toUploadFile.directoryName
     });
   },
   methods: {
     uploadFile: function uploadFile() {
+      var _this2 = this;
+
       var mypostparameters = new FormData();
       mypostparameters.append('file', this.toUploadFile.file);
       mypostparameters.append('directoryName', this.toUploadFile.directoryName);
-      axios.post('/api/media/store', mypostparameters).then(function (response) {})["catch"](function (error) {
+      axios.post('/api/media/store', mypostparameters).then(function (response) {
+        _this2.$store.dispatch('updateMedia', {
+          folder: _this2.toUploadFile.directoryName
+        });
+      })["catch"](function (error) {
         console.log(error);
       });
     },
@@ -2836,26 +2853,55 @@ __webpack_require__.r(__webpack_exports__);
       this.toUploadFile.file = event.target.files[0];
     },
     insideFolder: function insideFolder(folderName) {
-      var _this3 = this;
-
       if (this.toUploadFile.directoryName != '') {
         this.toUploadFile.directoryName += '/' + folderName;
       } else {
         this.toUploadFile.directoryName += folderName;
       }
 
-      axios.get('/api/media/get/?folder=' + this.toUploadFile.directoryName).then(function (response) {
-        _this3.folders = response.data.dirNames;
-        _this3.files = response.data.filesArr;
+      this.$store.dispatch('updateMedia', {
+        folder: this.toUploadFile.directoryName
+      });
+    },
+    newFolder: function newFolder() {
+      var _this3 = this;
+
+      axios.post('/api/media/createFolder', {
+        currentFolder: this.toUploadFile.directoryName,
+        newFolder: this.createFolder
+      }).then(function (response) {
+        _this3.$store.dispatch('updateMedia', {
+          folder: _this3.toUploadFile.directoryName
+        });
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    newFolder: function newFolder() {
-      axios.post('/api/media/createFolder', {
+    deleteFolder: function deleteFolder(folder) {
+      var _this4 = this;
+
+      axios.post('/api/media/deleteFolder', {
         currentFolder: this.toUploadFile.directoryName,
-        newFolder: this.createFolder
-      }).then(function (response) {})["catch"](function (error) {
+        folder: folder
+      }).then(function (response) {
+        _this4.$store.dispatch('updateMedia', {
+          folder: _this4.toUploadFile.directoryName
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    deleteFile: function deleteFile(file) {
+      var _this5 = this;
+
+      axios.post('/api/media/deleteFile', {
+        currentFolder: this.toUploadFile.directoryName,
+        file: file
+      }).then(function (response) {
+        _this5.$store.dispatch('updateMedia', {
+          folder: _this5.toUploadFile.directoryName
+        });
+      })["catch"](function (error) {
         console.log(error);
       });
     }
@@ -44429,32 +44475,46 @@ var render = function() {
                       "div",
                       {
                         key: folder,
-                        staticClass: "col-lg-3 col-md-3 col-sm-4 align-center"
+                        staticClass:
+                          "col-6 col-md-4 col-sm-6 col-lg-3 align-center"
                       },
                       [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-dark folder-wrap",
-                            attrs: { role: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.insideFolder(folder)
-                              }
-                            }
-                          },
-                          [
-                            _c("span", {
+                        _c("div", { staticClass: "m-1" }, [
+                          _c(
+                            "button",
+                            {
                               staticClass:
-                                "glyphicon glyphicon-folder-open folderIcons"
-                            }),
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(folder) +
-                                "\n                            "
-                            )
-                          ]
-                        )
+                                "position-absolute btn btn-danger btn-sm",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteFolder(folder)
+                                }
+                              }
+                            },
+                            [_vm._v("X")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "btn btn-dark folder-wrap w-100 text-center p-2",
+                              attrs: { role: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.insideFolder(folder)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "                                \n                                " +
+                                  _vm._s(folder) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        ])
                       ]
                     )
                   }),
@@ -44463,40 +44523,56 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "container" }, [
+                _c("div", { staticClass: "row p-2 border-top" }),
+                _vm._v(" "),
                 _c(
                   "div",
                   { staticClass: "row" },
                   _vm._l(_vm.files, function(file) {
                     return _c(
                       "div",
-                      { key: file["name"], staticClass: "col-12" },
+                      {
+                        key: file["name"],
+                        staticClass: "col-6 col-md-4 col-sm-6 col-lg-3"
+                      },
                       [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-link text-dark",
-                            attrs: { href: file["fileUrl"] }
-                          },
-                          [
-                            _c("img", {
-                              attrs: {
-                                src: file["fileUrl"],
-                                alt: "",
-                                width: "150px"
-                              }
-                            }),
-                            _c("br"),
-                            _vm._v(" "),
-                            _c("span", {
+                        _c("div", { staticClass: "m-1 shadow" }, [
+                          _c(
+                            "button",
+                            {
                               staticClass:
-                                "glyphicon glyphicon-file folderIcons"
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "file-name" }, [
-                              _vm._v(_vm._s(file["fileName"]))
-                            ])
-                          ]
-                        )
+                                "position-absolute btn btn-danger btn-sm",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteFile(file["fileName"])
+                                }
+                              }
+                            },
+                            [_vm._v("X")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "btn btn-link text-dark",
+                              attrs: { href: file["fileUrl"] }
+                            },
+                            [
+                              _c("img", {
+                                staticClass: "img-fluid",
+                                attrs: {
+                                  src: file["fileUrl"],
+                                  alt: file["fileName"]
+                                }
+                              }),
+                              _c("br"),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "file-name" }, [
+                                _vm._v(_vm._s(file["fileName"]))
+                              ])
+                            ]
+                          )
+                        ])
                       ]
                     )
                   }),
@@ -70419,7 +70495,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     cart: [],
     wishlist: [],
     product_categories: [],
-    product_attributes: []
+    product_attributes: [],
+    media: {
+      folders: [],
+      files: []
+    }
   },
   getters: {
     getNote: function getNote(state) {
@@ -70436,6 +70516,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     getProductAttributes: function getProductAttributes(state) {
       return state.product_attributes;
+    },
+    getMediaFolders: function getMediaFolders(state) {
+      return state.media.folders;
+    },
+    getMediaFiles: function getMediaFiles(state) {
+      return state.media.files;
     }
   },
   mutations: {
@@ -70453,6 +70539,10 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     },
     updateProductAttributesM: function updateProductAttributesM(state, data) {
       state.product_attributes = data;
+    },
+    updateMedias: function updateMedias(state, data) {
+      state.media.folders = data.dirNames;
+      state.media.files = data.filesArr;
     }
   },
   actions: {
@@ -70501,6 +70591,16 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       setTimeout(function () {
         axios.post('/api/admin/product-attributes').then(function (response) {
           commit('updateProductAttributesM', response.data);
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }, 2);
+    },
+    updateMedia: function updateMedia(_ref6, payload) {
+      var commit = _ref6.commit;
+      setTimeout(function () {
+        axios.post('/api/media/get/?folder=' + payload.folder).then(function (response) {
+          commit('updateMedias', response.data);
         })["catch"](function (error) {
           return console.log(error);
         });

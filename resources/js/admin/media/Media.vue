@@ -29,22 +29,28 @@
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-4 align-center" v-for="folder in folders" :key="folder">
-                            <a class="btn btn-dark folder-wrap" role="button" @click="insideFolder(folder)">
-                                <span class="glyphicon glyphicon-folder-open folderIcons"></span>
+                        <div class="col-6 col-md-4 col-sm-6 col-lg-3 align-center" v-for="folder in folders" :key="folder">
+                            <div class="m-1">
+                                <button class="position-absolute btn btn-danger btn-sm" @click="deleteFolder(folder)">X</button>
+                                <a class="btn btn-dark folder-wrap w-100 text-center p-2" role="button" @click="insideFolder(folder)">                                
                                 {{ folder }}
-                            </a>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="container">
+                    <div class="row p-2 border-top">
+                    </div>
                     <div class="row">
-                        <div class="col-12" v-for="file in files" :key="file['name']">
-                            <a v-bind:href="file['fileUrl']" class="btn btn-link text-dark">
-                                <img v-bind:src="file['fileUrl']" alt="" width="150px"><br>
-                                <span class="glyphicon glyphicon-file folderIcons"></span>
-                                <span class="file-name">{{ file['fileName'] }}</span>
-                            </a>
+                        <div class="col-6 col-md-4 col-sm-6 col-lg-3" v-for="file in files" :key="file['name']">
+                            <div class="m-1 shadow">
+                                <button class="position-absolute btn btn-danger btn-sm" @click="deleteFile(file['fileName'])">X</button>
+                                <a v-bind:href="file['fileUrl']" class="btn btn-link text-dark">
+                                    <img v-bind:src="file['fileUrl']" v-bind:alt="file['fileName']" class="img-fluid"><br>
+                                    <span class="file-name">{{ file['fileName'] }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,14 +63,14 @@
 
 <script>
 import Sidebar from '../Sidebar';
+import { mapGetters } from 'vuex'
+
 export default {
     components: {
         'sidebar': Sidebar
     },
     data(){
         return{
-            folders:[],
-            files:[],
             toUploadFile:{
                 directoryName: '',
                 file: undefined
@@ -72,23 +78,28 @@ export default {
             createFolder: ''
         }
     },
+    computed: {
+          ...mapGetters({
+        folders: 'getMediaFolders',
+        files: 'getMediaFiles',
+      }),
+    },
     beforeCreate(){
             axios.get('/api/adminhome')
             .then(response => {this.message = response.data.message})
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
     mounted(){
-        axios.get('/api/media/get').then(response => {
-            this.folders = response.data.dirNames;
-            this.files = response.data.filesArr;
-        }).catch(error => {console.log(error)});
+          this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
     },
     methods:{
         uploadFile(){
             const mypostparameters= new FormData();
             mypostparameters.append('file', this.toUploadFile.file);
             mypostparameters.append('directoryName', this.toUploadFile.directoryName);
-            axios.post('/api/media/store', mypostparameters).then(response => {}).catch(error => {console.log(error)});
+            axios.post('/api/media/store', mypostparameters).then(response => {
+                this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
+            }).catch(error => {console.log(error)});
         },
         Images_onFileChanged (event) {
             this.toUploadFile.file = event.target.files[0];
@@ -100,13 +111,22 @@ export default {
             else{
             this.toUploadFile.directoryName += folderName;
             }
-            axios.get('/api/media/get/?folder=' + this.toUploadFile.directoryName).then(response => {
-            this.folders = response.data.dirNames;
-            this.files = response.data.filesArr;
-        }).catch(error => {console.log(error)});
+            this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName});
         },
         newFolder(){
-            axios.post('/api/media/createFolder', {currentFolder: this.toUploadFile.directoryName, newFolder: this.createFolder}).then(response => {}).catch(error => {console.log(error)});
+            axios.post('/api/media/createFolder', {currentFolder: this.toUploadFile.directoryName, newFolder: this.createFolder}).then(response => {
+                this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
+            }).catch(error => {console.log(error)});
+        },
+        deleteFolder(folder){
+            axios.post('/api/media/deleteFolder', {currentFolder: this.toUploadFile.directoryName, folder}).then(response => {
+                this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
+            }).catch(error => {console.log(error)});
+        },
+        deleteFile(file){
+            axios.post('/api/media/deleteFile', {currentFolder: this.toUploadFile.directoryName, file}).then(response => {
+                this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
+            }).catch(error => {console.log(error)});
         }
     }
     }

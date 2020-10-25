@@ -9,7 +9,11 @@ export const store = new Vuex.Store({
       cart: [],
       wishlist: [],
       product_categories: [],
-      product_attributes: []
+      product_attributes: [],
+      media: {
+        folders: [],
+        files: []
+      }
     },
     getters: {
       getNote: state => {
@@ -26,6 +30,12 @@ export const store = new Vuex.Store({
       },
       getProductAttributes: state => {
         return state.product_attributes;
+      },
+      getMediaFolders: state => {
+        return state.media.folders;
+      },
+      getMediaFiles: state => {
+        return state.media.files;
       }
     },
     mutations: {
@@ -43,6 +53,10 @@ export const store = new Vuex.Store({
       },
       updateProductAttributesM: (state, data) => {        
         state.product_attributes = data;
+      },
+      updateMedias: (state, data) => {        
+        state.media.folders = data.dirNames;
+        state.media.files = data.filesArr;
       }
     }, 
     actions: {
@@ -78,6 +92,13 @@ export const store = new Vuex.Store({
         setTimeout(() => {
           axios.post('/api/admin/product-attributes')
         .then(response => {commit('updateProductAttributesM', response.data)})
+        .catch(error => console.log(error));
+        }, 2);
+      },
+      updateMedia: ({ commit }, payload) => {
+        setTimeout(() => {
+          axios.post('/api/media/get/?folder=' + payload.folder)
+        .then(response => {commit('updateMedias', response.data)})
         .catch(error => console.log(error));
         }, 2);
       }

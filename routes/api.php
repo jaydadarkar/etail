@@ -107,4 +107,5 @@ Route::post('/quicknote/delete', 'QuickNoteController@destroy')->middleware('aut
 Route::get('/media/get/{folder?}', 'MediaController@index')->middleware('auth');
 Route::post('/media/store', 'MediaController@store')->middleware('auth');
 Route::post('/media/createFolder', 'MediaController@createFolder')->middleware('auth');
-Route::post('/media/delete', 'MediaController@delete')->middleware('auth');
+Route::post('/media/deleteFile', 'MediaController@deleteFile')->middleware('auth');
+Route::post('/media/deleteFolder', 'MediaController@deleteFolder')->middleware('auth');

@@ -181,4 +181,38 @@ class MediaController extends Controller
                 }
             }
     }
+
+    public function deleteFile(Request $request){
+        $currentFolder = $request->currentFolder;
+        $file = $request->file;
+        $path = public_path().'/storage/';
+
+        if($currentFolder == ''){
+            if(File::exists($path . $file)){
+                File::delete($path . $file);
+            }
+        }
+        else{
+            if(File::exists($path. $currentFolder .'/'. $file)){
+                File::delete($path. $currentFolder .'/'. $file);
+            }
+        }
+    }
+
+    public function deleteFolder(Request $request){
+        $currentFolder = $request->currentFolder;
+        $toDeleteFolder = $request->folder;
+        $path = public_path().'/storage/';
+
+        if($currentFolder == ''){
+            if(File::exists($path . $toDeleteFolder)){
+                File::deleteDirectory($path . $toDeleteFolder);
+            }
+        }
+        else{
+            if(File::exists($path. $currentFolder .'/'. $toDeleteFolder)){
+                File::deleteDirectory($path. $currentFolder .'/'. $toDeleteFolder);
+            }
+        }
+    }
 }
