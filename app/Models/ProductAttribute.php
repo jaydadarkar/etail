@@ -10,4 +10,9 @@ class ProductAttribute extends Model
         'attribute_name', 'attribute_slug',
         'created_at', 'updated_at'
     ];
+
+    public function products()
+    {
+        return $this->hasMany(\App\Model\Product::class, 'product_variation', 'id');
+    }
 }

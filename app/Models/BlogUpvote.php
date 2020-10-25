@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Blog;
+use App\User;
 
 class BlogUpvote extends Model
 {
@@ -10,4 +12,14 @@ class BlogUpvote extends Model
         'blog_id', 'user_id',
         'created_at', 'updated_at'
     ];
+
+    public function blog()
+    {
+        return $this->hasOne(\App\Models\Blog::class, 'id', 'blog_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(\App\User::class, 'id', 'user_id');
+    }
 }

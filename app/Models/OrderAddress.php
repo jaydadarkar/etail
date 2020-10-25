@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Order;
 
 class OrderAddress extends Model
 {
@@ -15,4 +16,9 @@ class OrderAddress extends Model
         'user_shipping_postal', 'user_shipping_phone',
         'created_at', 'updated_at'
     ];
+
+    public function order()
+    {
+        return $this->hasOne(\App\Model\Order::class, 'id', 'order_id');
+    }
 }

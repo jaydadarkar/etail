@@ -58,7 +58,7 @@ class QuickNoteController extends Controller
     public function show(Request $request)
     {
         if(Auth::user()->role == "admin" || Auth::user()->role == "manager" || Auth::user()->role == "blogger"){
-            $notes = QuickNote::where('user_id', Auth::user()->id)->get();
+            $notes = QuickNote::where('user_id', Auth::user()->id)->with('user')->get();
             return response()->json($notes,200);
         }
         else{

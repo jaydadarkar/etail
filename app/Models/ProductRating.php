@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+use App\User;
 
 class ProductRating extends Model
 {
@@ -12,4 +14,14 @@ class ProductRating extends Model
         'is_confirmed',
         'created_at', 'updated_at'
     ];
+
+    public function product()
+    {
+        return $this->hasOne(\App\Models\Product::class, 'id', 'product_id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(\App\User::class, 'id', 'user_id');
+    }
 }

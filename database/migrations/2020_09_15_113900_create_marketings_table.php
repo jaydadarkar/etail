@@ -15,6 +15,7 @@ class CreateMarketingsTable extends Migration
     {
         Schema::create('marketings', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('campaign_name');
             $table->string('campaign_slug')->unique();
             $table->string('subject');

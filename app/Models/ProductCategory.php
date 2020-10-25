@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class ProductCategory extends Model
 {
@@ -13,4 +14,14 @@ class ProductCategory extends Model
         'product_cat_parent_id',
         'created_at', 'updated_at'
     ];
+
+    public function parent()
+    {
+        return $this->hasMany(\App\Models\ProductCategory::class, 'id', 'product_cat_parent_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(\App\Models\Product::class, 'product_category', 'id');
+    }
 }
