@@ -8,7 +8,7 @@
                     <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
                         <li class="nav-item d-none d-md-block">
                             <a class="nav-link p-3 text-nowrap active text-center" href="/admin">
-                                <span class="material-icons md-48">account_circle</span>
+                                <img v-bind:src="gravatar + email" alt="admin" class="rounded-circle" />
                                 <span class="font-weight-bold"><h3>Admin</h3></span>
                             </a>
                             <div class="text-center">
@@ -74,7 +74,12 @@
 
 <script>
 export default {
-
+    props: ['email'],
+    data(){
+        return{
+            gravatar: 'https://www.gravatar.com/avatar/'
+        }
+    }
 }
 </script>
 

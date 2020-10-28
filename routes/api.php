@@ -96,7 +96,8 @@ Route::group(['middleware' => ['auth', 'blogger']], function(){
 });
 
 Route::get('/adminhome', function(Request $request){
-    if($request->user()->role == 'admin' || $request->user()->role == 'manager' || $request->user()->role == 'blogger') return response(200);
+    if($request->user()->role == 'admin' || $request->user()->role == 'manager' || $request->user()->role == 'blogger') 
+    return response()->json(array('email' => md5(strtolower(trim($request->user()->email)))),200);
     return response()->json('Unauthorized Access',401);
 })->middleware('auth');
 

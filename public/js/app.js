@@ -2024,14 +2024,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       todelete: {
         id: ''
-      }
+      },
+      email: ''
     };
   },
   beforeCreate: function beforeCreate() {
     var _this = this;
 
     axios.get('/api/adminhome').then(function (response) {
-      _this.message = response.data.message;
+      _this.email = response.data.email;
     })["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
@@ -2319,7 +2320,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['email'],
+  data: function data() {
+    return {
+      gravatar: 'https://www.gravatar.com/avatar/'
+    };
+  }
+});
 
 /***/ }),
 
@@ -43131,7 +43139,7 @@ var render = function() {
         "div",
         { staticClass: "row min-vh-100 flex-column flex-md-row" },
         [
-          _c("sidebar"),
+          _c("sidebar", { attrs: { email: this.email } }),
           _vm._v(" "),
           _c("div", { staticClass: "col bg-faded my-3" }, [
             _c("h2", [_vm._v("Welcome Admin,")]),
@@ -43467,7 +43475,66 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "aside",
+    { staticClass: "col-12 col-md-2 p-0 bg-dark flex-shrink-1" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "nav",
+        {
+          staticClass:
+            "navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start py-2 pl-lg-0 pr-lg-0"
+        },
+        [
+          _c("div", { staticClass: "collapse navbar-collapse w-100" }, [
+            _c(
+              "ul",
+              {
+                staticClass:
+                  "flex-md-column flex-row navbar-nav w-100 justify-content-between"
+              },
+              [
+                _c("li", { staticClass: "nav-item d-none d-md-block" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass:
+                        "nav-link p-3 text-nowrap active text-center",
+                      attrs: { href: "/admin" }
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "rounded-circle",
+                        attrs: { src: _vm.gravatar + _vm.email, alt: "admin" }
+                      }),
+                      _vm._v(" "),
+                      _vm._m(1)
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._m(2)
+                ]),
+                _vm._v(" "),
+                _vm._m(3),
+                _vm._v(" "),
+                _vm._m(4),
+                _vm._v(" "),
+                _vm._m(5),
+                _vm._v(" "),
+                _vm._m(6),
+                _vm._v(" "),
+                _vm._m(7),
+                _vm._v(" "),
+                _vm._m(8)
+              ]
+            )
+          ])
+        ]
+      )
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -43475,480 +43542,421 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "aside",
-      { staticClass: "col-12 col-md-2 p-0 bg-dark flex-shrink-1" },
-      [
-        _c(
-          "div",
-          {
-            staticClass:
-              "d-md-none text-center w-100 border-bottom mobile-head-border"
-          },
-          [
-            _c("h3", { staticClass: "text-white pt-2" }, [
-              _vm._v("Etail Admin")
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "nav",
-          {
-            staticClass:
-              "navbar navbar-expand navbar-dark bg-dark flex-md-column flex-row align-items-start py-2 pl-lg-0 pr-lg-0"
-          },
-          [
-            _c("div", { staticClass: "collapse navbar-collapse w-100" }, [
-              _c(
-                "ul",
-                {
-                  staticClass:
-                    "flex-md-column flex-row navbar-nav w-100 justify-content-between"
-                },
-                [
-                  _c("li", { staticClass: "nav-item d-none d-md-block" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass:
-                          "nav-link p-3 text-nowrap active text-center",
-                        attrs: { href: "/admin" }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons md-48" }, [
-                          _vm._v("account_circle")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "font-weight-bold" }, [
-                          _c("h3", [_vm._v("Admin")])
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-default text-light",
-                          attrs: { href: "/" }
-                        },
-                        [_c("u", [_vm._v("Home")])]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-default text-light",
-                          attrs: { href: "/logout" }
-                        },
-                        [_c("u", [_vm._v("Logout")])]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3 dropdown-toogle",
-                        attrs: {
-                          href: "#",
-                          role: "button",
-                          id: "shop",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("shopping_cart")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Shop")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
-                        attrs: { "aria-labelledby": "shop" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product" }
-                          },
-                          [_vm._v("Products")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product/create" }
-                          },
-                          [_vm._v("New")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product-categories" }
-                          },
-                          [_vm._v("Categories")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product-attributes" }
-                          },
-                          [_vm._v("Attributes")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product-ratings" }
-                          },
-                          [_vm._v("Ratings")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/product-questions" }
-                          },
-                          [_vm._v("Questions")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/orders" }
-                          },
-                          [_vm._v("Orders")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/coupons" }
-                          },
-                          [_vm._v("Coupons")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/shipping" }
-                          },
-                          [_vm._v("Shipping")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/taxes" }
-                          },
-                          [_vm._v("Taxes")]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3",
-                        attrs: {
-                          href: "#",
-                          role: "button",
-                          id: "blog",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("create")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Blog")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
-                        attrs: { "aria-labelledby": "shop" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/blog" }
-                          },
-                          [_vm._v("Articles")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/blog/create" }
-                          },
-                          [_vm._v("New")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/blog/comments" }
-                          },
-                          [_vm._v("Comments")]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3",
-                        attrs: {
-                          href: "#",
-                          role: "button",
-                          id: "pages",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("layers")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Pages")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
-                        attrs: { "aria-labelledby": "shop" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/pages" }
-                          },
-                          [_vm._v("Pages")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/pages/create" }
-                          },
-                          [_vm._v("New")]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3",
-                        attrs: { href: "/admin/media" }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("perm_media")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Media")
-                        ])
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3",
-                        attrs: {
-                          href: "#",
-                          role: "button",
-                          id: "users",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("account_circle")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Users")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
-                        attrs: { "aria-labelledby": "shop" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/users" }
-                          },
-                          [_vm._v("All Users")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/users/create" }
-                          },
-                          [_vm._v("New")]
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "nav-item" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "nav-link p-3",
-                        attrs: {
-                          href: "#",
-                          role: "button",
-                          id: "settings",
-                          "data-toggle": "dropdown",
-                          "aria-haspopup": "true",
-                          "aria-expanded": "false"
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "material-icons" }, [
-                          _vm._v("settings")
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "d-none d-md-inline" }, [
-                          _vm._v(" Settings")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
-                        attrs: { "aria-labelledby": "shop" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/analytics" }
-                          },
-                          [_vm._v("Analytics")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/bulkmails" }
-                          },
-                          [_vm._v("Bulk Mails")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/helpdesk" }
-                          },
-                          [_vm._v("Helpdesk")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/affiliates" }
-                          },
-                          [_vm._v("Affiliates")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "/admin/settings" }
-                          },
-                          [_vm._v("Site Settings")]
-                        )
-                      ]
-                    )
-                  ])
-                ]
-              )
-            ])
-          ]
-        )
-      ]
+      "div",
+      {
+        staticClass:
+          "d-md-none text-center w-100 border-bottom mobile-head-border"
+      },
+      [_c("h3", { staticClass: "text-white pt-2" }, [_vm._v("Etail Admin")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "font-weight-bold" }, [
+      _c("h3", [_vm._v("Admin")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c(
+        "a",
+        { staticClass: "btn btn-default text-light", attrs: { href: "/" } },
+        [_c("u", [_vm._v("Home")])]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-default text-light",
+          attrs: { href: "/logout" }
+        },
+        [_c("u", [_vm._v("Logout")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link p-3 dropdown-toogle",
+          attrs: {
+            href: "#",
+            role: "button",
+            id: "shop",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("shopping_cart")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [_vm._v(" Shop")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
+          attrs: { "aria-labelledby": "shop" }
+        },
+        [
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/product" } },
+            [_vm._v("Products")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/product/create" }
+            },
+            [_vm._v("New")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/product-categories" }
+            },
+            [_vm._v("Categories")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/product-attributes" }
+            },
+            [_vm._v("Attributes")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/product-ratings" }
+            },
+            [_vm._v("Ratings")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/product-questions" }
+            },
+            [_vm._v("Questions")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/orders" } },
+            [_vm._v("Orders")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/coupons" } },
+            [_vm._v("Coupons")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/shipping" }
+            },
+            [_vm._v("Shipping")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/taxes" } },
+            [_vm._v("Taxes")]
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link p-3",
+          attrs: {
+            href: "#",
+            role: "button",
+            id: "blog",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("create")]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [_vm._v(" Blog")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
+          attrs: { "aria-labelledby": "shop" }
+        },
+        [
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/blog" } },
+            [_vm._v("Articles")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/blog/create" }
+            },
+            [_vm._v("New")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/blog/comments" }
+            },
+            [_vm._v("Comments")]
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link p-3",
+          attrs: {
+            href: "#",
+            role: "button",
+            id: "pages",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("layers")]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [_vm._v(" Pages")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
+          attrs: { "aria-labelledby": "shop" }
+        },
+        [
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/pages" } },
+            [_vm._v("Pages")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/pages/create" }
+            },
+            [_vm._v("New")]
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        { staticClass: "nav-link p-3", attrs: { href: "/admin/media" } },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("perm_media")]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [_vm._v(" Media")])
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link p-3",
+          attrs: {
+            href: "#",
+            role: "button",
+            id: "users",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("account_circle")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [_vm._v(" Users")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
+          attrs: { "aria-labelledby": "shop" }
+        },
+        [
+          _c(
+            "a",
+            { staticClass: "dropdown-item", attrs: { href: "/admin/users" } },
+            [_vm._v("All Users")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/users/create" }
+            },
+            [_vm._v("New")]
+          )
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", { staticClass: "nav-item" }, [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link p-3",
+          attrs: {
+            href: "#",
+            role: "button",
+            id: "settings",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("settings")]),
+          _vm._v(" "),
+          _c("span", { staticClass: "d-none d-md-inline" }, [
+            _vm._v(" Settings")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "dropdown-menu bg-light dropdown-width rounded-0 shadow w-100",
+          attrs: { "aria-labelledby": "shop" }
+        },
+        [
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/analytics" }
+            },
+            [_vm._v("Analytics")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/bulkmails" }
+            },
+            [_vm._v("Bulk Mails")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/helpdesk" }
+            },
+            [_vm._v("Helpdesk")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/affiliates" }
+            },
+            [_vm._v("Affiliates")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "dropdown-item",
+              attrs: { href: "/admin/settings" }
+            },
+            [_vm._v("Site Settings")]
+          )
+        ]
+      )
+    ])
   }
 ]
 render._withStripped = true

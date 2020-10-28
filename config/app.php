@@ -16,7 +16,24 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
     'desc' => env('APP_DESC', 'Etail'),
     'keywords' => env('APP_KEYWORDS', 'Etail'),
-    'DB_PREFIX' => env('DB_PREFIX', ''),
+    'social' => [
+        'facebook' => env('facebook',''),
+        'twitter' => env('twitter',''),
+        'instagram' => env('instagram',''),
+        'linkedin' => env('linkedin',''),
+        'tumblr' => env('tumblr',''),
+        'pinterest' => env('pinterest',''),
+        'reddit' => env('reddit',''),
+        'youtube' => env('youtube',''),
+        'quora' => env('quora',''),
+        'yelp' => env('yelp',''),
+        'medium' => env('medium',''),
+        'discord' => env('discord',''),
+        'slack' => env('slack','')
+    ],
+
+    'G_RECAPTCH_SITE_KEY' => env('G_RECAPTCH_SITE_KEY', ''),
+    'G_RECAPTCH_SECRET_KEY' => env('G_RECAPTCH_SECRET_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
