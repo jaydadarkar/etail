@@ -19,6 +19,7 @@ const router = new VueRouter({
 
 Vue.prototype.csrf = window.csrf;
 Vue.prototype.app_url = window.app_url;
+Vue.prototype.app_name = window.app_name;
 
 /**
  * The following block of code may be used to automatically register your

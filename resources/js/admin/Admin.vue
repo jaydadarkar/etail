@@ -94,7 +94,7 @@ export default {
     },
     beforeCreate(){
             axios.get('/api/adminhome')
-            .then(response => {this.email = response.data.email})
+            .then(response => {})
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
     computed: {

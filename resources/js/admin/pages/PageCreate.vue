@@ -53,7 +53,7 @@ export default {
     },
     beforeCreate(){
             axios.get('/api/admin')
-            .then(response => {this.message = response.data.message})
+            .then(response => {})
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
     methods: {

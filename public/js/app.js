@@ -2031,9 +2031,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/adminhome').then(function (response) {
-      _this.email = response.data.email;
-    })["catch"](function (response) {
+    axios.get('/api/adminhome').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2258,9 +2256,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/adminhome').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/adminhome').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2471,12 +2467,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   props: ['title', 'body', 'url', 'state'],
+  beforeCreate: function beforeCreate() {
+    var _this = this;
+
+    axios.get('/api/adminhome').then(function (response) {})["catch"](function (response) {
+      _this.$router.push({
+        name: 'Login'
+      });
+    });
+  },
   methods: {
     close: function close() {
       this.$emit('close');
     },
     submit: function submit(url, state) {
-      var _this = this;
+      var _this2 = this;
 
       var formData = new FormData(this.$refs.modalForm);
       var dataa = {};
@@ -2499,7 +2504,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       axios.post(url, dataa).then(function (response) {
-        if (state != undefined && state != '') _this.$store.dispatch(state);
+        if (state != undefined && state != '') _this2.$store.dispatch(state);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2594,11 +2599,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['email'],
   data: function data() {
     return {
-      gravatar: 'https://www.gravatar.com/avatar/'
+      gravatar: 'https://www.gravatar.com/avatar/',
+      email: ''
     };
+  },
+  beforeCreate: function beforeCreate() {
+    var _this = this;
+
+    axios.get('/api/adminhome').then(function (response) {
+      _this.email = response.data.email;
+    })["catch"](function (response) {
+      _this.$router.push({
+        name: 'Login'
+      });
+    });
   }
 });
 
@@ -2636,9 +2652,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/blogger').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/blogger').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2680,9 +2694,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/blogger').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/blogger').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2724,9 +2736,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/blogger').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/blogger').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2768,9 +2778,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/blogger').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/blogger').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2812,9 +2820,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2856,9 +2862,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2900,9 +2904,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2944,9 +2946,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -2988,9 +2988,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3102,9 +3100,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/adminhome').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/adminhome').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3256,9 +3252,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3313,9 +3307,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3387,9 +3379,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3457,9 +3447,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3501,9 +3489,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3545,9 +3531,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3589,9 +3573,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3633,9 +3615,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -3755,9 +3735,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4020,9 +3998,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4244,9 +4220,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4343,9 +4317,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4387,9 +4359,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4431,9 +4401,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4475,9 +4443,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4519,9 +4485,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/manager').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/manager').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4563,9 +4527,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -4607,9 +4569,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeCreate: function beforeCreate() {
     var _this = this;
 
-    axios.get('/api/admin').then(function (response) {
-      _this.message = response.data.message;
-    })["catch"](function (response) {
+    axios.get('/api/admin').then(function (response) {})["catch"](function (response) {
       _this.$router.push({
         name: 'Login'
       });
@@ -5433,50 +5393,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -10716,7 +10632,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\nsection[data-v-19c63da6] {\n    padding: 40px 0;\n}\nsection .section-title[data-v-19c63da6] {\n    text-align: center;\n    color: #007b5e;\n    margin-bottom: 50px;\n    text-transform: uppercase;\n}\n#footer[data-v-19c63da6] {\n    background: #007b5e !important;\n}\n#footer h5[data-v-19c63da6]{\n\tpadding-left: 10px;\n    border-left: 3px solid #eeeeee;\n    padding-bottom: 6px;\n    margin-bottom: 20px;\n    color:#ffffff;\n}\n#footer a[data-v-19c63da6] {\n    color: #ffffff;\n    text-decoration: none !important;\n    background-color: transparent;\n    -webkit-text-decoration-skip: objects;\n}\n#footer ul.social li[data-v-19c63da6]{\n\tpadding: 3px 0;\n}\n#footer ul.social li a i[data-v-19c63da6] {\n    margin-right: 5px;\n\tfont-size:25px;\n\ttransition: .5s all ease;\n}\n#footer ul.social li:hover a i[data-v-19c63da6] {\n\tfont-size:30px;\n\tmargin-top:-10px;\n}\n#footer ul.social li a[data-v-19c63da6],\n#footer ul.quick-links li a[data-v-19c63da6]{\n\tcolor:#ffffff;\n}\n#footer ul.social li a[data-v-19c63da6]:hover{\n\tcolor:#eeeeee;\n}\n#footer ul.quick-links li[data-v-19c63da6]{\n\tpadding: 3px 0;\n\ttransition: .5s all ease;\n}\n#footer ul.quick-links li[data-v-19c63da6]:hover{\n\tpadding: 3px 0;\n\tmargin-left:5px;\n\tfont-weight:700;\n}\n#footer ul.quick-links li a i[data-v-19c63da6]{\n\tmargin-right: 5px;\n}\n#footer ul.quick-links li:hover a i[data-v-19c63da6] {\n    font-weight: 700;\n}\n@media (max-width:767px){\n#footer h5[data-v-19c63da6] {\n    padding-left: 0;\n    border-left: transparent;\n    padding-bottom: 0px;\n    margin-bottom: 10px;\n}\n}\n", ""]);
+exports.push([module.i, "\nsection[data-v-19c63da6] {\n    padding: 40px 0;\n}\nsection .section-title[data-v-19c63da6] {\n    text-align: center;\n    color: #444;\n    margin-bottom: 50px;\n    text-transform: uppercase;\n}\n#footer[data-v-19c63da6] {\n    background: #ccc !important;\n}\n#footer a[data-v-19c63da6]{\n\tcolor: #444;\n}\n", ""]);
 
 // exports
 
@@ -48840,325 +48756,30 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { attrs: { id: "footer" } }, [
-      _c("div", { staticClass: "container" }, [
+  return _c("section", { attrs: { id: "footer" } }, [
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
         _c(
           "div",
           {
             staticClass:
-              "row text-center text-xs-center text-sm-left text-md-left"
+              "col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-dark"
           },
           [
-            _c("div", { staticClass: "col-xs-12 col-sm-4 col-md-4" }, [
-              _c("h5", [_vm._v("Quick links")]),
-              _vm._v(" "),
-              _c("ul", { staticClass: "list-unstyled quick-links" }, [
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Home")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("About")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("FAQ")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Get Started")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Videos")
-                    ]
-                  )
-                ])
-              ])
-            ]),
+            _c("p", [_vm._v(_vm._s(_vm.app_name))]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 col-sm-4 col-md-4" }, [
-              _c("h5", [_vm._v("Quick links")]),
-              _vm._v(" "),
-              _c("ul", { staticClass: "list-unstyled quick-links" }, [
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Home")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("About")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("FAQ")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Get Started")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Videos")
-                    ]
-                  )
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 col-sm-4 col-md-4" }, [
-              _c("h5", [_vm._v("Quick links")]),
-              _vm._v(" "),
-              _c("ul", { staticClass: "list-unstyled quick-links" }, [
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Home")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("About")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("FAQ")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.fiverr.com/share/qb8D02" } },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Get Started")
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: "https://wwwe.sunlimetech.com",
-                        title: "Design and developed by"
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "fa fa-angle-double-right" }),
-                      _vm._v("Imprint")
-                    ]
-                  )
-                ])
-              ])
+            _c("p", { staticClass: "h6" }, [
+              _vm._v("Copyrights © All right Reversed.")
             ])
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c(
-            "div",
-            { staticClass: "col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-5" },
-            [
-              _c(
-                "ul",
-                { staticClass: "list-unstyled list-inline social text-center" },
-                [
-                  _c("li", { staticClass: "list-inline-item" }, [
-                    _c(
-                      "a",
-                      {
-                        attrs: { href: "https://www.fiverr.com/share/qb8D02" }
-                      },
-                      [_c("i", { staticClass: "fa fa-facebook" })]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "list-inline-item" }, [
-                    _c(
-                      "a",
-                      {
-                        attrs: { href: "https://www.fiverr.com/share/qb8D02" }
-                      },
-                      [_c("i", { staticClass: "fa fa-twitter" })]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "list-inline-item" }, [
-                    _c(
-                      "a",
-                      {
-                        attrs: { href: "https://www.fiverr.com/share/qb8D02" }
-                      },
-                      [_c("i", { staticClass: "fa fa-instagram" })]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "list-inline-item" }, [
-                    _c(
-                      "a",
-                      {
-                        attrs: { href: "https://www.fiverr.com/share/qb8D02" }
-                      },
-                      [_c("i", { staticClass: "fa fa-google-plus" })]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("li", { staticClass: "list-inline-item" }, [
-                    _c(
-                      "a",
-                      {
-                        attrs: {
-                          href: "https://www.fiverr.com/share/qb8D02",
-                          target: "_blank"
-                        }
-                      },
-                      [_c("i", { staticClass: "fa fa-envelope" })]
-                    )
-                  ])
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("hr")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white"
-            },
-            [
-              _c("p", [
-                _c("u", [
-                  _c(
-                    "a",
-                    { attrs: { href: "https://www.nationaltransaction.com/" } },
-                    [_vm._v("National Transaction Corporation")]
-                  )
-                ]),
-                _vm._v(
-                  " is a Registered MSP/ISO of Elavon, Inc. Georgia [a wholly owned subsidiary of U.S. Bancorp, Minneapolis, MN]"
-                )
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "h6" }, [
-                _vm._v("© All right Reversed."),
-                _c(
-                  "a",
-                  {
-                    staticClass: "text-green ml-2",
-                    attrs: {
-                      href: "https://www.sunlimetech.com",
-                      target: "_blank"
-                    }
-                  },
-                  [_vm._v("Sunlimetech")]
-                )
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c("hr")
-        ])
+        _c("hr")
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -49185,7 +48806,7 @@ var render = function() {
     { staticClass: "navbar sticky-top navbar-expand-md bg-dark navbar-dark" },
     [
       _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-        _vm._v("Etail")
+        _vm._v(_vm._s(_vm.app_name))
       ]),
       _vm._v(" "),
       _vm._m(0),
@@ -69341,6 +68962,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 });
 Vue.prototype.csrf = window.csrf;
 Vue.prototype.app_url = window.app_url;
+Vue.prototype.app_name = window.app_name;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

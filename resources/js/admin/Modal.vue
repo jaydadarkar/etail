@@ -66,6 +66,11 @@
     },
     props: 
       ['title', 'body', 'url', 'state'],
+    beforeCreate(){
+            axios.get('/api/adminhome')
+            .then(response => {})
+            .catch(response =>{this.$router.push({name: 'Login'})});
+    },
     methods: {
       close() {
         this.$emit('close');

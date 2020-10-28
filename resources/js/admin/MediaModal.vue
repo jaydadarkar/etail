@@ -136,9 +136,9 @@ export default {
     },
     beforeCreate(){
             axios.get('/api/adminhome')
-            .then(response => {this.message = response.data.message})
+            .then(response => {})
             .catch(response =>{this.$router.push({name: 'Login'})});
-        },
+    },
     mounted(){
           this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName})
     },

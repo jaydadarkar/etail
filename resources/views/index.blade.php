@@ -15,6 +15,7 @@
         <script>
             window.csrf = "{{ csrf_token() }}";
             window.app_url = "{{ \Config::get('app.url') }}";
+            window.app_name = "{{ \Config::get('app.name') }}";
         </script>
     </head>
     <body>
@@ -22,6 +23,7 @@
             <router-view></router-view>
         </div>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <script src="/js/app.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+        <script src="/js/app.js" async></script>
     </body>
 </html>

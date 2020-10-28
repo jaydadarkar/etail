@@ -20,7 +20,7 @@ export default {
     },
     beforeCreate(){
             axios.get('/api/blogger')
-            .then(response => {this.message = response.data.message})
+            .then(response => {})
             .catch(response =>{this.$router.push({name: 'Login'})});
         }
     }

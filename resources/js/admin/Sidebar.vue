@@ -74,12 +74,17 @@
 
 <script>
 export default {
-    props: ['email'],
     data(){
         return{
-            gravatar: 'https://www.gravatar.com/avatar/'
+            gravatar: 'https://www.gravatar.com/avatar/',
+            email: ''
         }
-    }
+    },
+    beforeCreate(){
+            axios.get('/api/adminhome')
+            .then(response => {this.email = response.data.email})
+            .catch(response =>{this.$router.push({name: 'Login'})});
+    },
 }
 </script>
 
