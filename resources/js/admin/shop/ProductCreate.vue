@@ -21,13 +21,17 @@
                         </select></div>
                     <div class="card-body">
                         <div class="form-group row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="mrp">Product MRP</label>
                             <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.mrp">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="mrp">Product Price</label>
                             <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.price">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.quantity">
                         </div>
                         </div>
                     </div>
@@ -85,20 +89,23 @@
                 <div class="card">
                     <div class="card-header p-1">Main Image</div>
                     <div class="card-body">
-                        <br />                        
+                        <img v-bind:src="product.primary_image" class="img-fluid">                        
                     </div>
                     <div class="card-footer">
-                        <a class="btn btn-primary">Select Image</a>
+                        <a class="btn btn-primary" @click="showModal('single')">Select Image</a>
                     </div>
                 </div>
                 <br />
                 <div class="card">
                     <div class="card-header p-1">Secondary Images</div>
                     <div class="card-body row">
-                        <br />                        
+                        <div class="col-6" v-for="image in product.other_images" :key="image">
+                        <button class="btn btn-danger btn-sm" @click="removeOtherImage(image)">X</button>
+                        <img v-bind:src="image" class="img-fluid">
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <a class="btn btn-primary">Select Images</a>
+                        <a class="btn btn-primary" @click="showModal('multi')">Select Images</a>
                     </div>
                 </div>
                 <br />
@@ -114,14 +121,18 @@
         </div>
     </div>
 </div>
+<mediamodal v-show="isModalVisible" @close="closeModal" title="Media Manager" state="updateMedia" @mediaSelect="pimage" @mediaSelectArr="simage" v-bind:selectType="mediaSelectType"></mediamodal>
 </div>
 </template>
 
 <script>
 import Sidebar from '../Sidebar';
+import MediaModal from '../MediaModal';
+
 export default {
     components: {
-        'sidebar': Sidebar
+        'sidebar': Sidebar,
+        'mediamodal': MediaModal,
     },
     data(){
         return{
@@ -129,14 +140,18 @@ export default {
                 name: '',
                 category: '',
                 price: 0,
-                quantity: 1,
+                quantity: 0,
                 description: '',
                 tags: '',
+                primary_image: '',
+                other_images: []
             },
             category: {
                 id: '',
                 product_category_name: ''
-            }
+            },
+            isModalVisible: false,
+            mediaSelectType: ''
         }
     },
     beforeCreate(){
@@ -155,6 +170,23 @@ export default {
                     }).catch(error => {
                         this.error = error;
                     });
+        },
+
+        showModal(type) {
+                this.mediaSelectType = type;
+                this.isModalVisible = true;
+        },
+        closeModal() {
+                this.isModalVisible = false;
+        },
+        pimage: function(imgPath){
+            this.product.primary_image = imgPath;
+        },
+        simage: function(imgArr){
+            this.product.other_images = imgArr;
+        },
+        removeOtherImage(filename){
+            this.product.other_images = this.product.other_images.filter(function(e) { return e !== filename });
         }
     }
 }

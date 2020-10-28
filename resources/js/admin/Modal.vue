@@ -79,6 +79,7 @@
         axios.post(url,dataa).then(response => {
           if(state != undefined && state != '') this.$store.dispatch(state)
           }).catch(error => {console.log(error)});
+        this.$emit('close');
       }
     },
   };
