@@ -121,7 +121,7 @@
         </div>
     </div>
 </div>
-<mediamodal v-show="isModalVisible" @close="closeModal" title="Media Manager" state="updateMedia" @mediaSelect="pimage" @mediaSelectArr="simage" v-bind:selectType="mediaSelectType"></mediamodal>
+<mediamodal v-show="isModalVisible" @close="closeModal" title="Media Manager" state="updateMedia" @mediaSelect="pimage" @mediaSelectArr="simage" v-bind:selectType="mediaSelectType" v-bind:images="product.other_images"></mediamodal>
 </div>
 </template>
 

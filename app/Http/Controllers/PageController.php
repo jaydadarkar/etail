@@ -80,7 +80,7 @@ class PageController extends Controller
      * @param  \App\Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
+    public function update(Request $request)
     {
         Page::where('id', $request->id)->update([
             'page_title' => $request->page_title,

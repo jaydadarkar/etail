@@ -22,7 +22,7 @@ export default {
         data(){
             return{
                 content: '',
-                slug: this.$route.params.page_name
+                slug: this.$route.params.slug
             }
         },
         mounted(){

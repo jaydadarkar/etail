@@ -59,12 +59,17 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::post('/admin/pages/create', 'PageController@store')->name('pages.store');
     Route::post('/admin/pages/update', 'PageController@update')->name('pages.update');
     Route::post('/admin/pages/delete', 'PageController@destroy')->name('pages.delete');
+
+    Route::get('/admin/users', 'UserController@index')->name('users.get');
+    Route::post('/admin/users/create', 'UserController@store')->name('users.store');
+    Route::post('/admin/users/update', 'UserController@update')->name('users.update');
+    Route::post('/admin/users/delete', 'UserController@destroy')->name('users.delete');
 });
 
 // ------------- Shop Manager -------------
 Route::group(['middleware' => ['auth', 'manager']], function(){
 
-    Route::get('/manager', function(){return response(200);})->name('admin');
+    Route::get('/manager', function(){return response(200);})->name('manager');
     Route::get('/admin/product', 'ProductController@get')->name('product.get');
     Route::get('/admin/product/edit', 'ProductController@edit')->name('product.edit');
     Route::post('/admin/product/store', 'ProductController@store')->name('product.store');
@@ -86,12 +91,10 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
 // ------------- Blogger -------------
 Route::group(['middleware' => ['auth', 'blogger']], function(){
 
-    Route::get('/blogger', function(){return response(200);})->name('admin');
-    Route::get('/admin/blog', 'ProductController@edit')->name('product.edit');
-    Route::get('/admin/blog/edit/:id', 'ProductController@edit')->name('product.edit');
-    Route::post('/admin/blog/store', 'ProductController@store')->name('product.store');
-    Route::post('/admin/blog/update', 'ProductController@update')->name('product.update');
-    Route::post('/admin/blog/delete', 'ProductController@delete')->name('product.delete');
+    Route::get('/blogger', function(){return response(200);})->name('blogger');
+    Route::post('/admin/blog/store', 'ProductController@store')->name('blog.store');
+    Route::post('/admin/blog/update', 'ProductController@update')->name('blog.update');
+    Route::post('/admin/blog/delete', 'ProductController@delete')->name('blog.delete');
 
 });
 

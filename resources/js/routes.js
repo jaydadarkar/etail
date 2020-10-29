@@ -78,7 +78,7 @@ export const routes = [
     { path: '/password/reset/:token', component: ConfirmNewPassword, name: 'ConfirmNewPassword' },
 
     // Pages
-    { path: '/pages/:page_name', component: Page, name: 'Page' },
+    { path: '/pages/:slug', component: Page, name: 'Page' },
 
     // Blog
     { path: '/blog', component: BlogIndex, name: 'BlogIndex' },
@@ -130,7 +130,7 @@ export const routes = [
     // Pages
     { path: '/admin/pages', component: AdminPageIndex, name: 'AdminPageIndex' },
     { path: '/admin/pages/create', component: AdminPageCreate, name: 'AdminPageCreate' },
-    { path: '/admin/pages/edit/:id', component: AdminPageEdit, name: 'AdminPageEdit' },
+    { path: '/admin/pages/edit/:slug', component: AdminPageEdit, name: 'AdminPageEdit' },
 
     // Media
     { path: '/admin/media', component: AdminMedia, name: 'AdminMedia' },

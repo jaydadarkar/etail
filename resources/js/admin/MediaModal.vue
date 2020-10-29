@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container">
+                <div class="container" id="listOfFolders">
                     <div class="row">
                         <div class="col-6 col-md-4 col-sm-6 col-lg-3 align-center" v-for="folder in folders" :key="folder">
                             <div class="m-1">
@@ -66,8 +66,10 @@
                     </div>
                 </div>
                 <div class="container">
-                    <div class="row p-2 border-top">
-                    </div>
+                  <div class="row p-2 border-top">
+                  </div>
+                </div>
+                <div class="container" id="listOfFiles">
                     <div class="row">
                         <div class="col-6 col-md-4 col-sm-6 col-lg-3" v-for="file in files" :key="file['name']">
                             <div class="m-1 shadow">
@@ -115,7 +117,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-    props: ['selectType'],
+    props: ['selectType', 'images'],
     data(){
         return{
             toUploadFile:{
@@ -125,7 +127,7 @@ export default {
             createFolder: '',
             filepath: '',
             filepathArr: []
-            
+
         }
     },
     computed: {
@@ -181,7 +183,7 @@ export default {
         selectedMe(name){
           switch(this.selectType){
             case 'single': this.filepath = name;break;
-            case 'multi': this.filepathArr.push(name);break;
+            case 'multi': this.filepathArr = this.images;this.filepathArr.push(name);break;
             default: this.filepath = name;break;
           }
         },
@@ -192,10 +194,14 @@ export default {
           }
           this.filepath = '';
           this.filepathArr = [];
+          this.toUploadFile.directoryName = '';
+          this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName});
           this.$emit('close');
         },
         close() {
-        this.$emit('close');
+          this.toUploadFile.directoryName = '';
+          this.$store.dispatch('updateMedia', {folder: this.toUploadFile.directoryName});
+          this.$emit('close');
         }
     }
     }
@@ -239,6 +245,7 @@ export default {
     border-top: 1px solid #eeeeee;
     justify-content: flex-end;
     z-index: 1021;
+    background-color: #fff;
   }
 
   .modal-body {
@@ -262,5 +269,15 @@ export default {
     background: #4AAE9B;
     border: 1px solid #4AAE9B;
     border-radius: 2px;
+  }
+
+  #listOfFiles{
+    height: 20rem;
+    overflow-y: auto;
+  }
+
+  #listOfFolders{
+    height: 3rem;
+    overflow-y: auto;
   }
 </style>
