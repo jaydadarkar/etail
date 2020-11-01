@@ -3728,9 +3728,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       attribute_name: "",
       attribute_slug: "",
-      todelete: {
-        id: ''
-      },
       isModalVisible: false,
       attributeForm: ''
     };
@@ -3771,7 +3768,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.attribute_name = "";
       this.attribute_slug = "";
     },
-    deleteattribute: function deleteattribute(attribute) {},
+    deleteattribute: function deleteattribute(attribute) {
+      var _this4 = this;
+
+      axios.post('/api/admin/product-attributes/delete', {
+        id: attribute
+      }).then(function (response) {
+        _this4.$store.dispatch('updateProductAttributes');
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     showModal: function showModal(category) {
       this.isModalVisible = true;
       this.attributeForm = "\n                <input class='form-control' type='hidden' value=\"".concat(category["id"], "\" name='id' />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_name"], "\" name='attribute_name' placeholder=\"Attribute Name\" /><br />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_slug"], "\" name='attribute_slug' placeholder=\"Attribute Slug\" /><br />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_values"] == null ? '' : category["attribute_values"].attribute_values, "\" name='attribute_values' placeholder=\"Attribute Values\" />");

@@ -52,9 +52,6 @@ export default {
         return{
             attribute_name:"",
             attribute_slug:"",
-            todelete:{
-                id: ''
-            },
             isModalVisible: false,
             attributeForm: ''
         }
@@ -86,7 +83,11 @@ export default {
                 this.attribute_slug = "";
         },
         deleteattribute(attribute){
-
+            axios.post('/api/admin/product-attributes/delete', {id: attribute})
+                .then(response => {
+                    this.$store.dispatch('updateProductAttributes');
+                    })
+                .catch(error => {console.log(error)});
         },
         showModal(category) {
                 this.isModalVisible = true;

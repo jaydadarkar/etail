@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
     Route::get('/admin/product-attributes/edit', 'ProductAttributeController@edit')->name('product-attributes.edit');
     Route::post('/admin/product-attributes/store', 'ProductAttributeController@store')->name('product-attributes.store');
     Route::post('/admin/product-attributes/update', 'ProductAttributeController@update')->name('product-attributes.update');
-    Route::post('/admin/product-attributes/delete', 'ProductAttributeController@delete')->name('product-attributes.delete');
+    Route::post('/admin/product-attributes/delete', 'ProductAttributeController@destroy')->name('product-attributes.delete');
 });
 
 // ------------- Blogger -------------

@@ -113,8 +113,11 @@ class ProductAttributeController extends Controller
      * @param  \App\ProductAttribute  $productAttribute
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductAttribute $productAttribute)
+    public function destroy(Request $request)
     {
-        //
+        ProductAttribute::where('id', $request->id)->delete();
+        ProductAttributeValue::where('attribute_id', $request->id)->delete();
+
+        return response()->json('Product Attribute And Values Deleted',200);
     }
 }
