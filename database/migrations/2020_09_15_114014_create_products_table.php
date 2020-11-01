@@ -20,11 +20,14 @@ class CreateProductsTable extends Migration
             $table->string('product_slug')->unique();
             $table->string('product_category');
             $table->string('product_brand')->nullable();
+            $table->string('product_type');
             $table->string('product_variation')->nullable();
+            $table->string('product_affiliate_link')->nullable();
             $table->string('product_short_desc');
-            $table->string('product_long_desc');
+            $table->longText('product_long_desc');
             $table->integer('product_mrp')->nullable();
             $table->integer('product_price');
+            $table->integer('product_quantity');
             $table->string('product_primary_image');
             $table->string('product_other_images')->nullable();
             $table->string('product_meta_keywords')->nullable();

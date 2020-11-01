@@ -62,7 +62,7 @@ class LoginController extends Controller
             return response()->json(['token' => $token, 'role' => $user->role], 200);
         }
         else{
-            return response()->json(['error' => 'Invalid Email / Password.'], 402);
+            return response()->json(['error' => 'Invalid Email / Password.'], 401);
         }
         
     }

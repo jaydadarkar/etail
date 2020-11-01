@@ -7,30 +7,29 @@
             <h2>Welcome Admin,</h2><p>Product List</p>
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
+                            <li class="list-group-item shadow m-1" v-for="product in products" v-bind:key="product.id">
                                 <div class="row">
-                                <div class="col-md-1">
-                                    <img class="img-fluid" src="https://via.placeholder.com/50x50">
+                                <div class="col-12 col-md-4 col-lg-2 text-center">
+                                    <img class="img-fluid" v-bind:src="product.product_primary_image">
                                 </div>
-                                <div class="col-md-5">
-                                    <h4><span class="title">Men's Round Neck Half T-shirt</span></h4>
-                                    <p>Main SKU :- <span class="main_sku">ABC123</span></p>
-                                    <p>Variation :- <span class="variation">Size : M | Color : Red</span></p>
-                                    <a class="text-success" href="/product/reebok-mens-drifit-black-t-shirt">View</a>&nbsp;&nbsp;
-                                    <a class="text-info" href="/admin/product/edit/1">Edit</a>&nbsp;&nbsp;
+                                <div class="col-12 col-md-8 col-lg-4">
+                                    <h4><span class="title">{{ product.product_name }}</span></h4>
+                                    <p>Main SKU :- <span class="main_sku">{{ product.product_sku }}</span></p>
+                                    <a class="text-success" v-bind:href="'/product/' + product.product_slug">View</a>&nbsp;&nbsp;
+                                    <a class="text-info" v-bind:href="'/admin/product/edit/' + product.product_slug">Edit</a>&nbsp;&nbsp;
                                     <a class="text-danger" href="#">Delete</a>
                                 </div>
-                                <div class="col-md-2">
-                                    <p>MRP :- <span class="mrp">90</span></p>
-                                    <p>Price :- <span class="price">79</span></p>
+                                <div class="col-4 col-md-4 col-lg-2">
+                                    <p>MRP :- <span class="mrp">{{ product.product_mrp }}</span></p>
+                                    <p>Price :- <span class="price">{{ product.product_price }}</span></p>
                                 </div>
-                                <div class="col-md-2">
-                                    <p>Type :- <span class="type">Simple</span></p>
+                                <div class="col-4 col-md-4 col-lg-2">
+                                    <p>Type :- <span class="type">{{ product.product_type }}</span></p>
                                 </div>
-                                <div class="col-md-2">
-                                    <p>Status :- <span class="status">Published</span></p>
+                                <div class="col-4 col-md-4 col-lg-2">
+                                    <p>Status :- <span class="status">{{ product.product_published }}</span></p>
                                 </div>
                                 </div>
                             </li>
@@ -50,10 +49,20 @@ export default {
     components: {
         'sidebar': Sidebar
     },
+    data(){
+        return{
+            products:{}
+        }
+    },
     beforeCreate(){
             axios.get('/api/manager')
             .then(response => {})
             .catch(response =>{this.$router.push({name: 'Login'})});
-        }
+        },
+    mounted(){
+        axios.get('/api/product/get').then(response => {
+            this.products = response.data;
+        }).catch(error => {console.log(error)});
+    }
 }
 </script>

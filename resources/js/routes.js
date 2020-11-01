@@ -110,7 +110,7 @@ export const routes = [
     // Shop
     { path: '/admin/product', component: AdminProductIndex, name: 'AdminProductIndex' },
     { path: '/admin/product/create', component: AdminProductCreate, name: 'AdminProductCreate' },
-    { path: '/admin/product/edit/:id', component: AdminProductDetail, name: 'AdminProductDetail' },
+    { path: '/admin/product/edit/:slug', component: AdminProductDetail, name: 'AdminProductDetail' },
     { path: '/admin/product-categories', component: AdminProductCategories, name: 'AdminProductCategories' },
     { path: '/admin/product-attributes', component: AdminProductAttributes, name: 'AdminProductAttributes' },
     { path: '/admin/product-ratings', component: AdminProductRatings, name: 'AdminProductRatings' },
