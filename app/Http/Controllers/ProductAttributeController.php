@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductAttribute;
+use App\Models\ProductAttributeValue;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ProductAttributeController extends Controller
 {
@@ -14,7 +17,8 @@ class ProductAttributeController extends Controller
      */
     public function index()
     {
-        //
+        $attributes = ProductAttribute::with('attributeValues')->get();
+        return response()->json($attributes, 200);
     }
 
     /**
@@ -35,7 +39,14 @@ class ProductAttributeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product_attribute = ProductAttribute::create([
+            'attribute_name' => $request->attribute_name,
+            'attribute_slug' => Str::of($request->attribute_slug)->slug('-'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        return response()->json($product_attribute , 200);
     }
 
     /**
@@ -69,7 +80,31 @@ class ProductAttributeController extends Controller
      */
     public function update(Request $request, ProductAttribute $productAttribute)
     {
-        //
+        ProductAttribute::where('id', $request->id)->update([
+            "attribute_name" => $request->attribute_name,
+            "attribute_slug" => $request->attribute_slug,
+            "updated_at" => now()
+        ]);
+
+        if(!empty($request->attribute_values)){
+            $values =  ProductAttributeValue::where('attribute_id', $request->id)->first();
+            if(!empty($values)){
+                ProductAttributeValue::where('attribute_id', $request->id)->update([
+                    'attribute_values' => $request->attribute_values,
+                    "updated_at" => now()
+                ]);
+            }
+            else{
+                ProductAttributeValue::create([
+                    'attribute_id' => $request->id,
+                    'attribute_values' => $request->attribute_values,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+            }
+        }
+
+        return response()->json('Product Attribute Updated',200);
     }
 
     /**

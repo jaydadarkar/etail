@@ -3668,6 +3668,40 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/admin/Sidebar.vue");
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Modal */ "./resources/js/admin/Modal.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3683,9 +3717,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"]
+    'sidebar': _Sidebar__WEBPACK_IMPORTED_MODULE_0__["default"],
+    'modal': _Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      attribute_name: "",
+      attribute_slug: "",
+      todelete: {
+        id: ''
+      },
+      isModalVisible: false,
+      attributeForm: ''
+    };
   },
   beforeCreate: function beforeCreate() {
     var _this = this;
@@ -3695,6 +3743,42 @@ __webpack_require__.r(__webpack_exports__);
         name: 'Login'
       });
     });
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    axios.get('/api/product-attributes/get').then(function (response) {
+      _this2.$store.dispatch('updateProductAttributes');
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])({
+    attributes: 'getProductAttributes'
+  })),
+  methods: {
+    createatteribute: function createatteribute() {
+      var _this3 = this;
+
+      axios.post('/api/admin/product-attributes/store', {
+        attribute_name: this.attribute_name,
+        attribute_slug: this.attribute_slug
+      }).then(function (response) {
+        _this3.$store.dispatch('updateProductAttributes');
+      })["catch"](function (error) {
+        console.log(error);
+      });
+      this.attribute_name = "";
+      this.attribute_slug = "";
+    },
+    deleteattribute: function deleteattribute(attribute) {},
+    showModal: function showModal(category) {
+      this.isModalVisible = true;
+      this.attributeForm = "\n                <input class='form-control' type='hidden' value=\"".concat(category["id"], "\" name='id' />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_name"], "\" name='attribute_name' placeholder=\"Attribute Name\" /><br />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_slug"], "\" name='attribute_slug' placeholder=\"Attribute Slug\" /><br />\n                <input class='form-control' type='text' value=\"").concat(category["attribute_values"] == null ? '' : category["attribute_values"].attribute_values, "\" name='attribute_values' placeholder=\"Attribute Values\" />");
+    },
+    closeModal: function closeModal() {
+      this.isModalVisible = false;
+    }
   }
 });
 
@@ -46091,28 +46175,185 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "container-fluid" }, [
-      _c(
-        "div",
-        { staticClass: "row min-vh-100 flex-column flex-md-row" },
-        [_c("sidebar"), _vm._v(" "), _vm._m(0)],
-        1
-      )
-    ])
-  ])
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c(
+          "div",
+          { staticClass: "row min-vh-100 flex-column flex-md-row" },
+          [
+            _c("sidebar"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col bg-faded my-3" }, [
+              _c("h2", [_vm._v("Welcome Admin,")]),
+              _c("p", [_vm._v("Product Attributes")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c("h4", [_vm._v("Create An Attribute")]),
+                  _vm._v(" "),
+                  _c("form", [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.attribute_name,
+                            expression: "attribute_name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "product_attribute_name",
+                          placeholder: "Attribute Name"
+                        },
+                        domProps: { value: _vm.attribute_name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.attribute_name = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.attribute_slug,
+                            expression: "attribute_slug"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "product_attribute_slug",
+                          placeholder: "Attribute Slug"
+                        },
+                        domProps: { value: _vm.attribute_slug },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.attribute_slug = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.createatteribute()
+                          }
+                        }
+                      },
+                      [_vm._v("Create")]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-md-6" },
+                  _vm._l(_vm.attributes, function(attribute) {
+                    return _c(
+                      "div",
+                      { key: attribute.id, staticClass: "card w-100 mb-1" },
+                      [
+                        _c("div", { staticClass: "card-header" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass: "material-icons",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteattribute(attribute["id"])
+                                }
+                              }
+                            },
+                            [_vm._v("delete")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "material-icons",
+                              on: {
+                                click: function($event) {
+                                  return _vm.showModal(attribute)
+                                }
+                              }
+                            },
+                            [_vm._v("edit")]
+                          ),
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(attribute["attribute_name"]) +
+                              "\n                        "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(
+                                attribute["attribute_values"] == null
+                                  ? ""
+                                  : attribute["attribute_values"]
+                                      .attribute_values
+                              ) +
+                              "\n                        "
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("modal", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isModalVisible,
+            expression: "isModalVisible"
+          }
+        ],
+        attrs: {
+          title: "Edit Product Attributes",
+          body: this.attributeForm,
+          url: "/api/admin/product-attributes/update",
+          state: "updateProductAttributes"
+        },
+        on: { close: _vm.closeModal }
+      })
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col bg-faded my-3" }, [
-      _c("h2", [_vm._v("Welcome Admin,")]),
-      _c("p", [_vm._v("Product Attributes")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -71502,7 +71743,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     cart: [],
     wishlist: [],
     product_categories: [],
-    product_attributes: [],
+    attributes: [],
     media: {
       folders: [],
       files: []
@@ -71522,7 +71763,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       return state.product_categories;
     },
     getProductAttributes: function getProductAttributes(state) {
-      return state.product_attributes;
+      return state.attributes;
     },
     getMediaFolders: function getMediaFolders(state) {
       return state.media.folders;
@@ -71545,7 +71786,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       state.product_categories = data;
     },
     updateProductAttributesM: function updateProductAttributesM(state, data) {
-      state.product_attributes = data;
+      state.attributes = data;
     },
     updateMedias: function updateMedias(state, data) {
       state.media.folders = data.dirNames;
@@ -71596,7 +71837,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     updateProductAttributes: function updateProductAttributes(_ref5) {
       var commit = _ref5.commit;
       setTimeout(function () {
-        axios.post('/api/admin/product-attributes').then(function (response) {
+        axios.get('/api/product-attributes/get').then(function (response) {
           commit('updateProductAttributesM', response.data);
         })["catch"](function (error) {
           return console.log(error);

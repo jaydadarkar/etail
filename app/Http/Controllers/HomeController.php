@@ -26,4 +26,9 @@ class HomeController extends Controller
     {
         return response()->json(Auth::user()->name(),200);
     }
+
+    public function home(Request $request)
+    {
+        return view('index');
+    }
 }

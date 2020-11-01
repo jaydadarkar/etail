@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+use App\Models\ProductAttributeValue;
 
 class ProductAttribute extends Model
 {
@@ -13,6 +15,11 @@ class ProductAttribute extends Model
 
     public function products()
     {
-        return $this->hasMany(\App\Model\Product::class, 'product_variation', 'id');
+        return $this->hasMany(\App\Models\Product::class, 'product_variation', 'id');
+    }
+
+    public function attributeValues()
+    {
+        return $this->hasOne(\App\Models\ProductAttributeValue::class, 'attribute_id', 'id');
     }
 }
