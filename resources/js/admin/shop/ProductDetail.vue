@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-md-8">
                 <input type="text" class="form-control form-group mb-0" placeholder="Product Name" v-model="product.product_name">
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Slug:- <span class="slug" v-bind="product.product_slug"></span></p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Slug:- <span class="slug">{{ app_url+ '/product/' +product.product_slug }}</span></p>
                 <input type="text" class="form-control form-group" placeholder="Product Brand Name" v-model="product.product_brand">
                 <input type="text" class="form-control form-group" placeholder="Product Short Description" v-model="product.product_short_desc">
                 <textarea class="form-control form-group" placeholder="Product Long Description" v-model="product.product_long_desc" rows="5"></textarea>
@@ -88,7 +88,7 @@
                         <br />                        
                     </div>
                     <div class="card-footer">
-                        <input type="submit" class="btn btn-primary" value="Publish" @click="createproduct">
+                        <input type="submit" class="btn btn-primary" value="Update" @click="updateproduct">
                     </div>
                 </div>
                 <br />
@@ -152,6 +152,7 @@ export default {
     data(){
         return{
             product: {
+                id: '',
                 product_name: '',
                 product_sku: '',
                 product_slug: '',
@@ -202,8 +203,8 @@ export default {
         }).catch(error => {console.log(error)});
     },
     methods: {
-        async createproduct(){
-            await axios.post('/api/admin/product/store', this.product).then(response => {
+        async updateproduct(){
+            await axios.post('/api/admin/product/update', this.product).then(response => {
                 this.product.product_name = '';
                 this.product.product_sku = '';
                 this.product.product_slug = '';
@@ -242,7 +243,7 @@ export default {
             this.product.product_other_images = imgArr;
         },
         removeOtherImage(filename){
-            this.product.product_other_images = this.product.other_images.filter(function(e) { return e !== filename });
+            this.product.product_other_images = this.product.product_other_images.filter(function(e) { return e !== filename });
         }
     }
 }

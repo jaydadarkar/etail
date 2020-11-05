@@ -10,9 +10,9 @@
                     <div class="carousel-item active">
                     <img class="d-block w-100" v-bind:src="product.product_primary_image" alt="First slide">
                     </div>
-                        <div class="carousel-item" v-if="product.product_other_images" v-for="img in product.product_other_images" v-bind:key="img">
+                    <div class="carousel-item" v-for="img in product.product_other_images" v-bind:key="img">
                         <img class="d-block w-100" v-bind:src="img">
-                        </div>
+                    </div>
                 </div>
                 <a class="carousel-control-prev" href="#carousel-thumb" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -24,10 +24,10 @@
                 </a>
 
                 <ol class="carousel-indicators">
-                    <li data-target="#carousel-thumb" data-slide-to="0" class="active">
+                    <li data-target="#carousel-thumb" class="active">
                         <img class="d-block w-100 border border-dark shadow" v-bind:src="product.product_primary_image">
                     </li>
-                        <li data-target="#carousel-thumb" v-bind:data-slide-to="i" v-if="product.product_other_images" v-for="(img,i) in product.product_other_images" v-bind:key="img">
+                        <li data-target="#carousel-thumb" v-for="img in product.product_other_images" v-bind:key="img">
                             <img class="d-block w-100 border border-dark shadow" v-bind:src="img">
                         </li>
                 </ol>
@@ -56,6 +56,7 @@
                 </div>
                 <hr />
                 <p></p>
+                <div v-if="product.product_type != 'affiliate'">
                 <div id="quantity" class="">
                     <div class="input-group">
                        <input type="button" value="-" class="button-minus" data-field="quantity">
@@ -64,6 +65,10 @@
                        <a class="btn btn-primary btn-lg ml-1">Add To Cart</a>
                        <a class="btn btn-danger btn-lg ml-1">Add To Wishlist</a>
                     </div>
+                </div>
+                </div>
+                <div v-else>
+                       <a class="btn btn-primary btn-lg ml-1" target="_blank" v-bind:href="product.product_affiliate_link">Go To Shop</a>
                 </div>
             </div>
             <div class="col-12 p-4"><hr /></div>

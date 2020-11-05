@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -54,7 +55,7 @@ class ProductController extends Controller
                     'product_price' => $request->product_price,
                     'product_quantity' => $request->product_quantity,
                     'product_primary_image' => $request->product_primary_image,
-                    'product_other_images' => $request->product_other_images,
+                    'product_other_images' => !empty($request->product_other_images) ? $request->product_other_images : null,
                     'product_meta_keywords' => $request->product_meta_keywords,
                     'product_meta_desc' => $request->product_meta_desc,
                     'product_published' => $request->product_published,
@@ -81,7 +82,7 @@ class ProductController extends Controller
                     'product_price' => $request->product_price,
                     'product_quantity' => 0,
                     'product_primary_image' => $request->product_primary_image,
-                    'product_other_images' => $request->product_other_images,
+                    'product_other_images' => !empty($request->product_other_images) ? $request->product_other_images : null,
                     'product_meta_keywords' => $request->product_meta_keywords,
                     'product_meta_desc' => $request->product_meta_desc,
                     'product_published' => $request->product_published,
@@ -106,7 +107,8 @@ class ProductController extends Controller
      */
     public function show(Request $request)
     {
-        $p = Product::where('product_slug', $request->slug)->first();
+        $p = Product::where('product_slug', $request->slug)->with(['questions', 'rating'])->first();
+        $p->category_detail = ProductCategory::whereIn('id', $p->product_category)->get();
         return response()->json($p, 200);
     }
 
@@ -134,53 +136,57 @@ class ProductController extends Controller
         $p;
         switch($request->product_type){
             case 'simple': 
-                $p = Product::where('id', $request->id)->update([
-                    'product_name' => $request->product_name,
-                    'product_sku' => $request->product_sku,
-                    'product_slug' => $request->product_name,
-                    'product_category' => $request->product_category,
-                    'product_brand' => $request->product_brand,
-                    'product_short_desc' => $request->product_short_desc,
-                    'product_long_desc' => $request->product_long_desc,
-                    'product_type' => $request->product_type,
-                    'product_mrp' => $request->product_mrp,
-                    'product_price' => $request->product_price,
-                    'product_quantity' => $request->product_quantity,
-                    'product_primary_image' => $request->product_primary_image,
-                    'product_other_images' => $request->product_other_images,
-                    'product_meta_keywords' => $request->product_meta_keywords,
-                    'product_meta_desc' => $request->product_meta_desc,
-                    'product_published' => $request->product_published,
-                    'product_featured' => ($request->product_featured == true) ? 1 : 0,
-                    'product_tags' => $request->product_tags,
-                    'product_dimensions' => $request->product_dimensions,
-                    'updated_at' => Carbon::now()
-                ]);
+                $p = Product::where('id', $request->id)->first();
+
+                $p->product_name = $request->product_name;
+                $p->product_sku = $request->product_sku;
+                $p->product_slug = $request->product_name;
+                $p->product_category = $request->product_category;
+                $p->product_brand = $request->product_brand;
+                $p->product_short_desc = $request->product_short_desc;
+                $p->product_long_desc = $request->product_long_desc;
+                $p->product_type = $request->product_type;
+                $p->product_mrp = $request->product_mrp;
+                $p->product_price = $request->product_price;
+                $p->product_quantity = $request->product_quantity;
+                $p->product_primary_image = $request->product_primary_image;
+                $p->product_other_images = !empty($request->product_other_images) ? $request->product_other_images : null;
+                $p->product_meta_keywords = $request->product_meta_keywords;
+                $p->product_meta_desc = $request->product_meta_desc;
+                $p->product_published = $request->product_published;
+                $p->product_featured = ($request->product_featured == true) ? 1 : 0;
+                $p->product_tags = $request->product_tags;
+                $p->product_dimensions = $request->product_dimensions;
+                $p->updated_at = Carbon::now();
+                $p->save();
+
                 break;
             case 'affiliate': 
-                $p = Product::where('id', $request->id)->update([
-                    'product_name' => $request->product_name,
-                    'product_sku' => $request->product_sku,
-                    'product_slug' => $request->product_name,
-                    'product_category' => $request->product_category,
-                    'product_brand' => $request->product_brand,
-                    'product_affiliate_link' => $request->product_affiliate_link,
-                    'product_short_desc' => $request->product_short_desc,
-                    'product_long_desc' => $request->product_long_desc,
-                    'product_type' => $request->product_type,
-                    'product_mrp' => $request->product_mrp,
-                    'product_price' => $request->product_price,
-                    'product_quantity' => $request->product_quantity,
-                    'product_primary_image' => $request->product_primary_image,
-                    'product_other_images' => $request->product_other_images,
-                    'product_meta_keywords' => $request->product_meta_keywords,
-                    'product_meta_desc' => $request->product_meta_desc,
-                    'product_published' => $request->product_published,
-                    'product_featured' => ($request->product_featured == true) ? 1 : 0,
-                    'product_tags' => $request->product_tags,
-                    'product_dimensions' => $request->product_dimensions,
-                    'updated_at' => Carbon::now()
-                ]);
+                $p = Product::where('id', $request->id)->first();
+
+                $p->product_name = $request->product_name;
+                $p->product_sku = $request->product_sku;
+                $p->product_slug = $request->product_name;
+                $p->product_category = $request->product_category;
+                $p->product_brand = $request->product_brand;
+                $p->product_affiliate_link = $request->product_affiliate_link;
+                $p->product_short_desc = $request->product_short_desc;
+                $p->product_long_desc = $request->product_long_desc;
+                $p->product_type = $request->product_type;
+                $p->product_mrp = $request->product_mrp;
+                $p->product_price = $request->product_price;
+                $p->product_quantity = 0;
+                $p->product_primary_image = $request->product_primary_image;
+                $p->product_other_images = !empty($request->product_other_images) ? $request->product_other_images : null;
+                $p->product_meta_keywords = $request->product_meta_keywords;
+                $p->product_meta_desc = $request->product_meta_desc;
+                $p->product_published = $request->product_published;
+                $p->product_featured = ($request->product_featured == true) ? 1 : 0;
+                $p->product_tags = $request->product_tags;
+                $p->product_dimensions = $request->product_dimensions;
+                $p->updated_at = Carbon::now();
+                $p->save();
+
                 break;
             case 'variable': break;
         }

@@ -238,7 +238,7 @@ export default {
             this.product.product_other_images = imgArr;
         },
         removeOtherImage(filename){
-            this.product.product_other_images = this.product.other_images.filter(function(e) { return e !== filename });
+            this.product.product_other_images = this.product.product_other_images.filter(function(e) { return e !== filename });
         }
     }
 }

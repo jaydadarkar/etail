@@ -13,6 +13,10 @@
                     <div class="col-3">{{ page['role'] }}</div>
                 </div>
             </div>
+            <div class="col-12 p-2"></div>
+            <div class="col-12 text-center">
+                <paginate @pageChange="pageChange" v-bind:total="this.data.total" v-bind:current="this.data.current_page" v-bind:per_page="this.data.per_page"></paginate>
+            </div>
         </div>
     </div>
 </div>
@@ -23,11 +27,13 @@
 <script>
 import Sidebar from '../Sidebar';
 import Modal from '../Modal';
+import Paginate from '../Paginate';
 
 export default {
     components: {
         'sidebar': Sidebar,
-        'modal' : Modal
+        'modal' : Modal,
+        'paginate' : Paginate,
     },
     data(){
         return {
@@ -36,8 +42,10 @@ export default {
                 name: '',
                 email: '',
             },
+            data: {},
             isModalVisible: false,
-            categoryForm: ''
+            categoryForm: '',
+            page: 1
         }
     },
     beforeCreate(){
@@ -46,8 +54,9 @@ export default {
             .catch(response =>{this.$router.push({name: 'Login'})});
         },
     mounted(){
-        axios.get('/api/admin/users').then(response => {
-            this.users = response.data;
+        axios.get('/api/admin/users/?page=' + this.page).then(response => {
+            this.users = response.data.data;
+            this.data = response.data;
         }).catch(error => {console.log(error)});
     },
     methods: {
@@ -61,6 +70,13 @@ export default {
             },
             closeModal() {
                 this.isModalVisible = false;
+            },
+            pageChange: function(page){
+                this.page = page;
+                axios.get('/api/admin/users/?page=' + this.page).then(response => {
+                    this.users = response.data.data;
+                    this.data = response.data;
+                }).catch(error => {console.log(error)});
             }
     }
     }
