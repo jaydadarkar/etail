@@ -70,6 +70,13 @@
                 <div v-else>
                        <a class="btn btn-primary btn-lg ml-1" target="_blank" v-bind:href="product.product_affiliate_link">Go To Shop</a>
                 </div>
+                <br />
+                <div class="product_category">
+                    <p>Category : <span v-for="cat in product.category_detail" :key="cat.id"><u>{{ cat.product_category_name }}</u>&nbsp;</span></p>
+                </div>
+                <div class="product_tags">
+                    <p>Tags : <span>{{ product.product_tags }}</span></p>
+                </div>
             </div>
             <div class="col-12 p-4"><hr /></div>
             <div class="col-12">

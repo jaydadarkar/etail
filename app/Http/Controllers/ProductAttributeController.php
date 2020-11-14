@@ -55,9 +55,9 @@ class ProductAttributeController extends Controller
      * @param  \App\ProductAttribute  $productAttribute
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductAttribute $productAttribute)
+    public static function show($productAttributeId)
     {
-        //
+        return ProductAttribute::where('id', $productAttributeId)->first();
     }
 
     /**

@@ -18,6 +18,8 @@ class Product extends Model
         'product_tags', 'product_dimensions', 'created_at', 'updated_at'
     ];
 
+    // Relations
+
     public function questions()
     {
         return $this->hasMany(\App\Models\ProductQuestion::class, 'product_id', 'id');
@@ -33,6 +35,12 @@ class Product extends Model
         return $this->hasMany(\App\Models\OrderProduct::class, 'product_id', 'id');
     }
 
+    public function variations()
+    {
+        return $this->hasMany(\App\Models\Product::class, 'product_sku', 'product_sku')->where('product_type','simple');
+    }
+
+    // Accessors And Mutators
     public function getProductOtherImagesAttribute($value)
     {
         return unserialize($value);

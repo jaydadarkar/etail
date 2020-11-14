@@ -19,25 +19,75 @@
                         <option value="simple">Simple</option>
                         <option value="affiliate">Affiliate</option>
                         <option value="variable">Variable</option>
+                        <option value="digital">Digital</option>
                         </select></div>
                     <div class="card-body">
-                        <div class="form-group row">
-                        <div class="col-md-12" v-if="product.product_type == 'affiliate'">
-                            <label for="affiliate">Product Affiliate Link</label>
-                            <input id="affiliate" type="text" class="form-control m-1" placeholder="Product Affiliate Link" v-model="product.product_affiliate_link">
+                        <!-- Affiliate -->
+                        <div class="row" v-if="product.product_type == 'affiliate'">
+                            <div class="col-md-12">
+                                <label for="affiliate">Product Affiliate Link</label>
+                                <input id="affiliate" type="text" class="form-control m-1" placeholder="Product Affiliate Link" v-model="product.product_link">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mrp">Product MRP</label>
+                                <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="mrp">Product Price</label>
+                                <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label for="mrp">Product MRP</label>
-                            <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                        <!-- Simple -->
+                        <div class="row" v-if="product.product_type == 'simple'">
+                            <div class="col-md-4">
+                                <label for="mrp">Product MRP</label>
+                                <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="mrp">Product Price</label>
+                                <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                            </div>
+                            <div class="col-md-4" v-if="product.product_type == 'simple'">
+                                <label for="quantity">Quantity</label>
+                                <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label for="mrp">Product Price</label>
-                            <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                        <!-- Variable -->
+                        <div class="row" v-if="product.product_type == 'variable'">
+                            <div class="col-md-12">
+                                <div v-for="att in attribute" :key="att.id" class="row">
+                                    <div class="col-6">
+                                    <input type="checkbox" v-bind:value="att.id" v-model="product.product_variation">
+                                    <label>&nbsp;&nbsp;{{ att.attribute_name }}</label>
+                                    </div>
+                                    <div class="col-6" v-if="product.product_variation.includes(att.id)">
+                                    <div v-for="val in att.attribute_values.attribute_values.split(',')" :key="val" >
+                                        <input type="checkbox" v-bind:value="val" @change="varUpdate(att.id, val)">
+                                        <label>&nbsp;&nbsp;{{ val }}</label><br>
+                                    </div>
+                                    </div>
+                                    <div class="col-12"><hr /></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-4" v-if="product.product_type == 'simple'">
-                            <label for="quantity">Quantity</label>
-                            <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
-                        </div>
+                        <!-- Digital -->
+                        <div class="row" v-if="product.product_type == 'digital'">
+                            <div class="col-md-12">
+                                <label for="digital">Product Link</label>
+                                <input id="digital" type="text" class="form-control m-1" placeholder="Product Link" v-model="product.product_link">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="mrp">Product MRP</label>
+                                <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="mrp">Product Price</label>
+                                <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="quantity">Quantity</label>
+                                <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,7 +146,7 @@
                     <div class="card-header p-1">Category</div>
                     <div class="card-body">
                         <div v-for="cat in category" :key="cat.id">
-                            <input type="checkbox" v-bind:value="cat.id" v-model="product.product_category"><label> {{ cat.product_category_name }}</label><br>
+                            <input type="checkbox" v-bind:value="cat.id" v-model="product.product_category"><label>&nbsp;&nbsp;{{ cat.product_category_name }}</label><br>
                         </div>
                     </div>
                 </div>
@@ -161,7 +211,7 @@ export default {
                 product_short_desc: '',
                 product_long_desc: '',
                 product_type: 'simple',
-                product_affiliate_link: '',
+                product_link: '',
                 product_mrp: '',
                 product_price: '',
                 product_quantity: 1,
@@ -172,7 +222,8 @@ export default {
                 product_featured: false,
                 product_published: 0,
                 product_tags: '',
-                product_dimensions: ''
+                product_dimensions: '',
+                product_variation_attributes: []
             },
             category: {
                 id: '',
@@ -180,8 +231,7 @@ export default {
             },
             attribute:{
                 id: '',
-                attribute_name: '',
-                attribute_values: {}
+                attribute_name: ''
             },
             isModalVisible: false,
             mediaSelectType: ''
@@ -196,7 +246,11 @@ export default {
         axios.get('/api/product-category/get').then(response => {
             this.category = response.data;
         }).catch(error => {console.log(error)});
-    },
+
+        axios.get('/api/product-attributes/get').then(response => {
+            this.attribute = response.data;
+        }).catch(error => {console.log(error)});
+},
     methods: {
         async createproduct(){
             await axios.post('/api/admin/product/store', this.product).then(response => {
@@ -239,6 +293,27 @@ export default {
         },
         removeOtherImage(filename){
             this.product.product_other_images = this.product.product_other_images.filter(function(e) { return e !== filename });
+        },
+        async varUpdate(att, val){
+            let isContain = await this.contains(att, val);
+            if(isContain){
+                await this.product.product_variation_attributes.splice(this.product.product_variation_attributes.indexOf({attribute_id: att, values: val}));
+            }
+            else{
+                await this.product.product_variation_attributes.push({attribute_id: att, values: val});
+            }
+        },
+        contains(att, val){
+            let ans = this.product.product_variation_attributes.filter(function(elem){
+                if(elem.attribute_id == att && elem.values == val){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            });
+            if(ans.length > 0) return true;
+            return false;
         }
     }
 }

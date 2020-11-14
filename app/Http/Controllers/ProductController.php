@@ -7,6 +7,7 @@ use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Http\Controllers\ProductAttribute;
 
 class ProductController extends Controller
 {
@@ -18,6 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $p = Product::get();
+        $p = $p->groupBy('product_sku');
         return response()->json($p, 200);
     }
 
@@ -93,10 +95,96 @@ class ProductController extends Controller
                     'updated_at' => Carbon::now()
                 ]);
             break;
-            case 'variable':break;
-        }
+            case 'variable':
+                // Create Parent
+                $p = Product::create([
+                    'product_name' => $request->product_name,
+                    'product_sku' => $request->product_sku,
+                    'product_slug' => $request->product_name,
+                    'product_category' => $request->product_category,
+                    'product_brand' => $request->product_brand,
+                    'product_short_desc' => $request->product_short_desc,
+                    'product_long_desc' => $request->product_long_desc,
+                    'product_type' => $request->product_type,
+                    'product_mrp' => null,
+                    'product_price' => 0,
+                    'product_quantity' => 0,
+                    'product_primary_image' => $request->product_primary_image,
+                    'product_other_images' => !empty($request->product_other_images) ? $request->product_other_images : null,
+                    'product_meta_keywords' => $request->product_meta_keywords,
+                    'product_meta_desc' => $request->product_meta_desc,
+                    'product_published' => $request->product_published,
+                    'product_featured' => ($request->product_featured == true) ? 1 : 0,
+                    'product_tags' => $request->product_tags,
+                    'product_dimensions' => $request->product_dimensions,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);    
+
+                // Variation Starts
+                $arr = collect($request->product_variation_attributes);
+
+                // Group Values By Their Attribute Id
+                $arr = $arr->groupBy('attribute_id');
+                $result = collect();
+
+                // Foreach Attribute Id
+                foreach($arr as $col){
+                    $result = ProductController::recursiveVariation($result, $col);
+                }
+
+                // Foreach Attribute Value Combination
+                foreach ($result as $key => $value) {
+                    // Flatten The Array
+                    $abc = \Arr::flatten($value);
+                    $variation = '';
+                    for($i = 0; $i < count($abc); $i++){
+                        // If Modulus Is 0 Then It Is Attribute Else It Is Value
+                        if($i%2 == 0){
+                            // Get The Attribute Name
+                            $attribute = ProductAttributeController::show($abc[$i]);
+                            $variation .= $attribute->attribute_name.':';
+                        }
+                        else{
+                            // For The Comma (,) In The String
+                            if(count($abc) == $i + 1){
+                                $variation .= $abc[$i];
+                            }
+                            else{
+                                $variation .= $abc[$i].',';
+                            }
+                        }
+                    }
+                    // Child Product
+                    $p = Product::create([
+                        'product_name' => $request->product_name . ' ' . '(' .$variation. ')',
+                        'product_sku' => $request->product_sku,
+                        'product_slug' => $request->product_name . ' ' . '(' .$variation. ')',
+                        'product_category' => $request->product_category,
+                        'product_brand' => $request->product_brand,
+                        'product_short_desc' => $request->product_short_desc,
+                        'product_long_desc' => $request->product_long_desc,
+                        'product_type' => 'simple',
+                        'product_variation' => $variation,
+                        'product_mrp' => null,
+                        'product_price' => 0,
+                        'product_quantity' => 0,
+                        'product_primary_image' => $request->product_primary_image,
+                        'product_other_images' => !empty($request->product_other_images) ? $request->product_other_images : null,
+                        'product_meta_keywords' => $request->product_meta_keywords,
+                        'product_meta_desc' => $request->product_meta_desc,
+                        'product_published' => $request->product_published,
+                        'product_featured' => ($request->product_featured == true) ? 1 : 0,
+                        'product_tags' => $request->product_tags,
+                        'product_dimensions' => $request->product_dimensions,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+                    ]);    
+                }
+            break;
+            }
         
-        return response()->json($p, 200);
+        return response()->json('Product Created', 200);
     }
 
     /**
@@ -107,7 +195,7 @@ class ProductController extends Controller
      */
     public function show(Request $request)
     {
-        $p = Product::where('product_slug', $request->slug)->with(['questions', 'rating'])->first();
+        $p = Product::where('product_slug', $request->slug)->with(['questions', 'rating', 'variations'])->first();
         $p->category_detail = ProductCategory::whereIn('id', $p->product_category)->get();
         return response()->json($p, 200);
     }
@@ -200,9 +288,35 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
-        $p = Product::destroy($request->id);
-        return response()->json($p, 200);
+        $p = Product::where('id', $request->id)->first();
+        if($p){
+            if($p->product_type == 'variable'){
+                Product::where('product_sku', $p->product_sku)->delete();
+            }
+            else{
+                Product::destroy($request->id);
+            }
+            return response()->json('Product Deleted', 200);    
+        }
+        return response()->json('Invalid Data', 422);
+    }
+    
+    /**
+     * Recursive Function For Cross Joining Variations.
+     *
+     * @param  Collection  $collectionA
+     * @param  Collection  $collectionB
+     * @return Collection  $collection
+     */
+    
+    public function recursiveVariation($collectionA, $collectionB){
+        if(count($collectionA) == 0){
+            // Return The First Collection
+            return $collectionB;
+        }
+        // Cross Join The 2 Collections
+        return $collectionA->crossJoin($collectionB);
     }
 }

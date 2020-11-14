@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth', 'manager']], function(){
     Route::get('/admin/product/edit', 'ProductController@edit')->name('product.edit');
     Route::post('/admin/product/store', 'ProductController@store')->name('product.store');
     Route::post('/admin/product/update', 'ProductController@update')->name('product.update');
-    Route::post('/admin/product/delete', 'ProductController@delete')->name('product.delete');
+    Route::post('/admin/product/delete', 'ProductController@destroy')->name('product.delete');
 
     Route::get('/admin/product-category/edit', 'ProductCategoryController@edit')->name('product-category.edit');
     Route::post('/admin/product-category/store', 'ProductCategoryController@store')->name('product-category.store');

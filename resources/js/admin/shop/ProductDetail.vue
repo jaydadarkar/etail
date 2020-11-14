@@ -4,7 +4,7 @@
     <div class="row min-vh-100 flex-column flex-md-row">
         <sidebar></sidebar>
         <div class="col bg-faded my-3">
-            <h2>Welcome Admin,</h2><p>Create New Product</p>
+            <h2>Welcome Admin,</h2><p>Edit Product</p>
             <div class="row">
                 <div class="col-md-8">
                 <input type="text" class="form-control form-group mb-0" placeholder="Product Name" v-model="product.product_name">
@@ -13,31 +13,74 @@
                 <input type="text" class="form-control form-group" placeholder="Product Short Description" v-model="product.product_short_desc">
                 <textarea class="form-control form-group" placeholder="Product Long Description" v-model="product.product_long_desc" rows="5"></textarea>
                 <div class="card">
-                    <div class="card-header p-1">
-                        <label for="type">Product Type</label>
-                        <select name="type" id="type" class="form-control" v-model="product.product_type">
-                        <option value="simple">Simple</option>
-                        <option value="affiliate">Affiliate</option>
-                        <option value="variable">Variable</option>
-                        </select></div>
+                    <div class="card-header">
+                        <span>Product Type :- {{ product.product_type }}</span>
+                    </div>
                     <div class="card-body">
                         <div class="form-group row">
-                        <div class="col-md-12" v-if="product.product_type == 'affiliate'">
-                            <label for="affiliate">Product Affiliate Link</label>
-                            <input id="affiliate" type="text" class="form-control m-1" placeholder="Product Affiliate Link" v-model="product.product_affiliate_link">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="mrp">Product MRP</label>
-                            <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="mrp">Product Price</label>
-                            <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
-                        </div>
-                        <div class="col-md-4" v-if="product.product_type == 'simple'">
-                            <label for="quantity">Quantity</label>
-                            <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
-                        </div>
+                            <!-- Affiliate -->
+                            <div v-if="product.product_type == 'affiliate'" class="row">
+                                <div class="col-md-12">
+                                    <label for="affiliate">Product Affiliate Link</label>
+                                    <input id="affiliate" type="text" class="form-control m-1" placeholder="Product Affiliate Link" v-model="product.product_link">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mrp">Product MRP</label>
+                                    <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mrp">Product Price</label>
+                                    <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                                </div>
+                            </div>
+                            <!-- Digital -->
+                            <div v-if="product.product_type == 'digital'" class="row">
+                                <div class="col-md-12">
+                                    <label for="digital">Product Link</label>
+                                    <input id="digital" type="text" class="form-control m-1" placeholder="Product Link" v-model="product.product_link">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mrp">Product MRP</label>
+                                    <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mrp">Product Price</label>
+                                    <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                                </div>
+                                <div class="col-md-4" v-if="product.product_type == 'simple'">
+                                    <label for="quantity">Quantity</label>
+                                    <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
+                                </div>
+                            </div>
+                            <!-- Simple -->
+                            <div v-if="product.product_type == 'simple'" class="row">
+                                <div class="col-md-4">
+                                    <label for="mrp">Product MRP</label>
+                                    <input id="mrp" type="text" class="form-control m-1" placeholder="Product MRP" v-model="product.product_mrp">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mrp">Product Price</label>
+                                    <input id="price" type="text" class="form-control m-1" placeholder="Product Price" v-model="product.product_price">
+                                </div>
+                                <div class="col-md-4" v-if="product.product_type == 'simple'">
+                                    <label for="quantity">Quantity</label>
+                                    <input id="quantity" type="text" class="form-control m-1" placeholder="Product Quantity" v-model="product.product_quantity">
+                                </div>
+                            </div>
+                            <!-- Variable -->
+                            <div v-if="product.product_type == 'variable'" class="row">
+                                <div class="col-12 row" v-for="vari in product.variations" :key="vari.id">
+                                    <div class="col-8">
+                                        {{ vari.product_variation }}
+                                    </div>
+                                    <div class="col-4">
+                                        <a v-bind:href="'/admin/product/edit/' + vari.product_slug" target="_blank">Edit Variation</a>
+                                    </div>
+                                    <div class="col-12 p-1">
+                                        <hr />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,7 +139,7 @@
                     <div class="card-header p-1">Category</div>
                     <div class="card-body">
                         <div v-for="cat in category" :key="cat.id">
-                            <input type="checkbox" v-bind:value="cat.id" v-model="product.product_category"><label> {{ cat.product_category_name }}</label><br>
+                            <input type="checkbox" v-bind:value="cat.id" v-model="product.product_category"><label>&nbsp;&nbsp;{{ cat.product_category_name }}</label><br>
                         </div>
                     </div>
                 </div>
@@ -173,7 +216,8 @@ export default {
                 product_featured: false,
                 product_published: 0,
                 product_tags: '',
-                product_dimensions: ''
+                product_dimensions: '',
+                variations: []
             },
             category: {
                 id: '',
