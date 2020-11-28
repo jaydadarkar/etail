@@ -6376,29 +6376,62 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      slider: ''
+      slider: '',
+      categories: [],
+      attribute: [],
+      filter_category: '',
+      filter_max_price: 999,
+      filter_min_price: 199,
+      filter_price: 500,
+      filter_attributes: ''
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     var slider = document.getElementById("myRange");
     var output = document.getElementById("demo");
     output.innerHTML = slider.value;
+    this.filter_price = slider.value;
 
     slider.oninput = function () {
+      this.filter_price = this.value;
       output.innerHTML = this.value;
     };
+
+    axios.get('/api/product-category/get').then(function (response) {
+      _this.categories = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+    axios.get('/api/product-attributes/get').then(function (response) {
+      _this.attribute = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  methods: {
+    filterCategory: function filterCategory(id) {
+      this.filter_category = id;
+      this.$emit('filter_products', {
+        category: this.filter_category
+      });
+    },
+    filterPrice: function filterPrice() {
+      this.$emit('filter_products', {
+        min: this.filter_min_price,
+        max: this.filter_price
+      });
+    },
+    filterAttribute: function filterAttribute(attribute, value) {
+      this.filter_attributes += attribute + ':' + value;
+      this.$emit('filter_products', {
+        attribute: this.filter_attributes
+      });
+    }
   }
 });
 
@@ -6689,85 +6722,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -6776,6 +6730,74 @@ __webpack_require__.r(__webpack_exports__);
     'v-header': _components_Header__WEBPACK_IMPORTED_MODULE_0__["default"],
     'v-footer': _components_Footer__WEBPACK_IMPORTED_MODULE_1__["default"],
     'filters': _Filters__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      products: {
+        id: '',
+        product_name: '',
+        product_sku: '',
+        product_slug: '',
+        product_category: [],
+        product_brand: '',
+        product_variation: [],
+        product_short_desc: '',
+        product_long_desc: '',
+        product_type: '',
+        product_affiliate_link: '',
+        product_mrp: '',
+        product_price: '',
+        product_quantity: '',
+        product_primary_image: '',
+        product_other_images: [],
+        product_meta_keywords: '',
+        product_meta_desc: '',
+        product_featured: '',
+        product_published: '',
+        product_tags: '',
+        product_dimensions: '',
+        variations: []
+      },
+      order_by: '',
+      url: '/api/product/get?'
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/product/get').then(function (response) {
+      _this.products = response.data;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  methods: {
+    filter_products: function filter_products(_ref) {
+      var _this2 = this;
+
+      var category = _ref.category,
+          min = _ref.min,
+          max = _ref.max,
+          attribute = _ref.attribute;
+
+      if (category != undefined && category != null && category != '') {
+        this.url += 'category=' + category.toString() + '&&';
+      }
+
+      if (min != undefined && min != null && min != '' && max != undefined && max != null && max != '') {
+        this.url += 'min=' + min + '&&' + 'max=' + max + '&&';
+      }
+
+      if (attribute != undefined && attribute != null && attribute != '') {
+        this.url += 'attribute=' + attribute.toString() + '&&';
+      }
+
+      axios.get(this.url).then(function (response) {
+        _this2.products = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   }
 });
 
@@ -49610,7 +49632,21 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "col bg-faded py-3 flex-grow-1" }, [
             _c("h2", [_vm._v("Welcome Admin,")]),
-            _c("p", [_vm._v("Product List")]),
+            _c("p", [
+              _vm._v("Product List  "),
+              _c(
+                "span",
+                {
+                  staticClass: "btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      return _vm.$router.push({ name: "AdminProductCreate" })
+                    }
+                  }
+                },
+                [_vm._v("New")]
+              )
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-12" }, [
@@ -51722,126 +51758,144 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "filters" }, [
-      _c("div", { staticClass: "row" }, [
+  return _c("div", { staticClass: "filters" }, [
+    _c(
+      "div",
+      { staticClass: "row" },
+      [
         _c("div", { staticClass: "col-12" }, [
           _c("h4", [_vm._v("Categories")]),
           _vm._v(" "),
-          _c("p", [_vm._v("T-shirts")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Jeans")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Shirts")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Trousers")])
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            _vm._l(_vm.categories, function(cat) {
+              return _c("div", { key: cat.id }, [
+                _c(
+                  "a",
+                  {
+                    attrs: { value: cat.id },
+                    on: {
+                      click: function($event) {
+                        return _vm.filterCategory(cat.id)
+                      }
+                    }
+                  },
+                  [
+                    _c("label", [
+                      _vm._v("  " + _vm._s(cat.product_category_name))
+                    ])
+                  ]
+                ),
+                _c("br")
+              ])
+            }),
+            0
+          )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [_c("hr")]),
+        _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "col-12" }, [
           _c("h4", [_vm._v("Price")]),
           _vm._v(" "),
           _c("div", { staticClass: "slidecontainer" }, [
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model:value",
+                  value: _vm.filter_price,
+                  expression: "filter_price",
+                  arg: "value"
+                }
+              ],
               staticClass: "slider",
               attrs: {
                 type: "range",
-                min: "299",
-                max: "899",
-                value: "400",
+                min: _vm.filter_min_price,
+                max: _vm.filter_max_price,
                 id: "myRange"
+              },
+              domProps: { value: _vm.filter_price },
+              on: {
+                change: function($event) {
+                  return _vm.filterPrice()
+                },
+                __r: function($event) {
+                  _vm.filter_price = $event.target.value
+                }
               }
             }),
             _vm._v(" "),
-            _c("p", [_vm._v("Price: "), _c("span", { attrs: { id: "demo" } })])
+            _vm._m(1)
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [_c("hr")]),
+        _vm._m(2),
         _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [
-          _c("h4", [_vm._v("Sizes")]),
-          _vm._v(" "),
-          _c("p", [
-            _c(
-              "a",
-              {
-                staticClass: "btn rounded-pill text-dark border",
-                attrs: { href: "" }
-              },
-              [_vm._v("S")]
-            ),
+        _vm._l(_vm.attribute, function(att) {
+          return _c("div", { key: att.id, staticClass: "col-12" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("h4", [_vm._v(_vm._s(att.attribute_name))])
+            ]),
             _vm._v(" "),
             _c(
-              "a",
-              {
-                staticClass: "btn rounded-pill text-dark border",
-                attrs: { href: "" }
-              },
-              [_vm._v("M")]
+              "div",
+              { staticClass: "col-12" },
+              _vm._l(att.attribute_values.attribute_values.split(","), function(
+                val
+              ) {
+                return _c("div", { key: val }, [
+                  _c("input", {
+                    attrs: { type: "checkbox" },
+                    domProps: { value: val },
+                    on: {
+                      change: function($event) {
+                        return _vm.filterAttribute(att.attribute_name, val)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", [_vm._v("  " + _vm._s(val))]),
+                  _c("br")
+                ])
+              }),
+              0
             ),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn rounded-pill text-dark border",
-                attrs: { href: "" }
-              },
-              [_vm._v("L")]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn rounded-pill text-dark border",
-                attrs: { href: "" }
-              },
-              [_vm._v("XL")]
-            )
+            _vm._m(3, true)
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [_c("hr")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-12" }, [
-          _c("h4", [_vm._v("Colors")]),
-          _vm._v(" "),
-          _c("p", [
-            _c("a", {
-              staticClass: "btn rounded-circle bg-primary p-3",
-              attrs: { href: "" }
-            }),
-            _vm._v(" "),
-            _c("a", {
-              staticClass: "btn rounded-circle bg-secondary p-3",
-              attrs: { href: "" }
-            }),
-            _vm._v(" "),
-            _c("a", {
-              staticClass: "btn rounded-circle bg-warning p-3",
-              attrs: { href: "" }
-            }),
-            _vm._v(" "),
-            _c("a", {
-              staticClass: "btn rounded-circle bg-success p-3",
-              attrs: { href: "" }
-            }),
-            _vm._v(" "),
-            _c("a", {
-              staticClass: "btn rounded-circle bg-danger p-3",
-              attrs: { href: "" }
-            })
-          ])
-        ])
-      ])
-    ])
+        })
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12" }, [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [_vm._v("Price: "), _c("span", { attrs: { id: "demo" } })])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12" }, [_c("hr")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12" }, [_c("hr")])
   }
 ]
 render._withStripped = true
@@ -52277,9 +52331,182 @@ var render = function() {
         _c("div", { staticClass: "row p-4" }),
         _vm._v(" "),
         _c("div", { staticClass: "row justify-content-center" }, [
-          _c("div", { staticClass: "col-md-3" }, [_c("filters")], 1),
+          _c(
+            "div",
+            { staticClass: "col-md-3" },
+            [_c("filters", { on: { filter_products: _vm.filter_products } })],
+            1
+          ),
           _vm._v(" "),
-          _vm._m(0)
+          _c("div", { staticClass: "col-md-9" }, [
+            _c("div", { staticClass: "row justify-content-end" }, [
+              _c("div", { staticClass: "col-12 col-lg-4" }, [
+                _c(
+                  "select",
+                  _vm._b(
+                    { staticClass: "form-control" },
+                    "select",
+                    _vm.order_by,
+                    false
+                  ),
+                  [
+                    _c("option", { attrs: { value: "asc", selected: "" } }, [
+                      _vm._v("Ascending")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "desc" } }, [
+                      _vm._v("Descending")
+                    ])
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(_vm.products, function(product) {
+                return _c(
+                  "div",
+                  { key: product[0].id, staticClass: "col-md-4 p-0 m-0" },
+                  [
+                    product[0].product_type == "variable"
+                      ? _c("div", { staticClass: "card m-1" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "text-decoration-none text-dark",
+                              attrs: {
+                                href: "/product/" + product[0].product_slug
+                              }
+                            },
+                            [
+                              _c("div", { staticClass: "card-header p-0" }, [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: {
+                                    src: product[0].product_primary_image,
+                                    alt: product[0].product_name
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "card-body" }, [
+                                _c("h5", [
+                                  _vm._v(_vm._s(product[0].product_name))
+                                ]),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "price" }, [
+                                  product[0].product_mrp != "null" &&
+                                  product[0].product_mrp != undefined &&
+                                  product[0].product_mrp >
+                                    product[0].product_price
+                                    ? _c(
+                                        "span",
+                                        { staticClass: "text-dander" },
+                                        [_vm._v(_vm._s(product[0].product_mrp))]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "text-success" }, [
+                                    _vm._v(_vm._s(product[0].product_price))
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("hr"),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "row text-center" }, [
+                                  _c("div", { staticClass: "col-12 p-0 m-0" }, [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-secondary",
+                                        attrs: {
+                                          href:
+                                            "/product/" +
+                                            product[0].product_slug
+                                        }
+                                      },
+                                      [_vm._v("Select Options")]
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ]
+                          )
+                        ])
+                      : _c("div", { staticClass: "card m-1" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "text-decoration-none text-dark",
+                              attrs: {
+                                href: "/product/" + product[0].product_slug
+                              }
+                            },
+                            [
+                              _c("div", { staticClass: "card-header p-0" }, [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: {
+                                    src: product[0].product_primary_image,
+                                    alt: product[0].product_name
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "card-body" }, [
+                                _c("h5", [
+                                  _vm._v(_vm._s(product[0].product_name))
+                                ]),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "price" }, [
+                                  product[0].product_mrp != "null" &&
+                                  product[0].product_mrp != undefined &&
+                                  product[0].product_mrp >
+                                    product[0].product_price
+                                    ? _c(
+                                        "span",
+                                        { staticClass: "text-dander" },
+                                        [_vm._v(_vm._s(product[0].product_mrp))]
+                                      )
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  _c("span", { staticClass: "text-success" }, [
+                                    _vm._v(_vm._s(product[0].product_price))
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("hr"),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "row text-center" }, [
+                                  _vm._m(0, true),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "col-6 p-0 m-0" }, [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-secondary",
+                                        attrs: {
+                                          href:
+                                            "/product/" +
+                                            product[0].product_slug
+                                        }
+                                      },
+                                      [_vm._v("View Details")]
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ]
+                          )
+                        ])
+                  ]
+                )
+              }),
+              0
+            )
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -52293,373 +52520,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-9" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 p-0 m-0" }, [
-          _c("div", { staticClass: "card m-1" }, [
-            _c(
-              "a",
-              {
-                staticClass: "text-decoration-none text-dark",
-                attrs: { href: "/product/reebok-mens-drifit-black-t-shirt" }
-              },
-              [
-                _c("div", { staticClass: "card-header p-0" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: {
-                      src: "http://via.placeholder.com/300x300",
-                      alt: ""
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "card-body" }, [
-                  _c("h5", [_vm._v("Reebok Men's Drifit Black T-shirt")]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _c("s", { staticClass: "text-dander" }, [_vm._v("$90")]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-success" }, [_vm._v("$79")])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row text-center" }, [
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { href: "#" }
-                        },
-                        [_vm._v("Add To Cart")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-6 p-0 m-0" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-secondary",
-                          attrs: {
-                            href: "/product/reebok-mens-drifit-black-t-shirt"
-                          }
-                        },
-                        [_vm._v("View Product")]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ])
-        ])
+    return _c("div", { staticClass: "col-6 p-0 m-0" }, [
+      _c("a", { staticClass: "btn btn-primary", attrs: { href: "#" } }, [
+        _vm._v("Add To Cart")
       ])
     ])
   }

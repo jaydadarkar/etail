@@ -48,7 +48,7 @@ class Product extends Model
 
     public function getProductCategoryAttribute($value)
     {
-        return unserialize($value);
+        return explode(',', $value);
     }
 
     public function getProductVariationAttribute($value)
@@ -63,7 +63,7 @@ class Product extends Model
 
     public function setProductCategoryAttribute($value)
     {
-        $this->attributes['product_category'] = serialize($value);
+        $this->attributes['product_category'] = implode($value);
     }
 
     public function setProductVariationAttribute($value)

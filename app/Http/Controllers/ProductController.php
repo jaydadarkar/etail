@@ -16,9 +16,23 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $p = Product::get();
+        $p = new Product;
+        if($request->category){
+            $request->category = str_replace('&&','',$request->category);
+            $p = $p->where('product_category', 'like', '%'.strval($request->category).'%');
+        }
+        if($request->min && $request->max){
+            $min = $request->min;
+            $max = $request->max;
+            $p = $p->whereBetween('product_price', array($min, $max));
+        }
+        if($request->attribute){
+            // 
+        }
+
+        $p = $p->get();
         $p = $p->groupBy('product_sku');
         return response()->json($p, 200);
     }

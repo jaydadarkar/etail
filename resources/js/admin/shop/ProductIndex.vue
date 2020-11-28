@@ -4,7 +4,7 @@
     <div class="row min-vh-100 flex-column flex-md-row">
         <sidebar></sidebar>
         <div class="col bg-faded py-3 flex-grow-1">
-            <h2>Welcome Admin,</h2><p>Product List</p>
+            <h2>Welcome Admin,</h2><p>Product List&nbsp;&nbsp;<span @click="$router.push({name: 'AdminProductCreate'})" class="btn btn-primary">New</span></p>
             <div class="row">
                 <div class="col-12">
                     <div class="">
