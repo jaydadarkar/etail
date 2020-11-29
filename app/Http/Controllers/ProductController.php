@@ -29,7 +29,10 @@ class ProductController extends Controller
             $p = $p->whereBetween('product_price', array($min, $max));
         }
         if($request->attribute){
-            // 
+            $attributes = explode(',', $request->attribute);
+            foreach($attributes as $attribute){
+                $p = $p->where('product_variation', 'like', '%'.$attribute.'%');
+            }
         }
 
         $p = $p->get();

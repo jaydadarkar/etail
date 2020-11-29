@@ -6,6 +6,14 @@
         <div class="col bg-faded py-3 flex-grow-1">
             <h2>Welcome Admin,</h2><p>Product List&nbsp;&nbsp;<span @click="$router.push({name: 'AdminProductCreate'})" class="btn btn-primary">New</span></p>
             <div class="row">
+                <div class="col-12 row">
+                    <div class="col-12 col-md-4">
+                        <select class="form-control" v-model="category_filter" @change="filter_products()">
+                            <option value="" selected disabled>Select Product Category</option>
+                            <option v-bind:value="cat.id" v-for="cat in product_categories">{{ cat.product_category_name }}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="">
                         <ul class="list-group list-group-flush">
@@ -51,7 +59,9 @@ export default {
     },
     data(){
         return{
-            products:{}
+            products:{},
+            category_filter: '',
+            product_categories: []
         }
     },
     beforeCreate(){
@@ -63,6 +73,10 @@ export default {
         axios.get('/api/product/get').then(response => {
             this.products = response.data;
         }).catch(error => {console.log(error)});
+
+        axios.get('/api/product-category/get').then(response => {
+            this.product_categories = response.data;
+        }).catch(error => {console.log(error)});
     },
     methods: {
         deleteProduct(id){
@@ -71,6 +85,11 @@ export default {
             }).catch(error => {
                 console.log(error);
             });
+        },
+        filter_products(){
+        axios.get('/api/product/get?category=' + this.category_filter).then(response => {
+            this.products = response.data;
+        }).catch(error => {console.log(error)});
         }
     }
 }

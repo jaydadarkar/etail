@@ -120,13 +120,23 @@ export default {
     methods: {
         filter_products: function({category, min, max, attribute}){
             if(category != undefined && category != null && category != ''){
-                this.url += 'category=' + category.toString() + '&&';
+                if(this.url.search('category=') != -1){
+                    this.url = this.url.replace(/category=\d/g, 'category=' + category);
+                }
+                else{
+                    this.url += 'category=' + category.toString() + '&&';
+                }
             }
             if((min != undefined && min != null && min != '') && (max != undefined && max != null && max != '')){
                 this.url += 'min=' + min +'&&' + 'max='+ max +'&&';
             }
             if(attribute != undefined && attribute != null && attribute != ''){
-                this.url += 'attribute=' + attribute.toString() + '&&';
+                if(this.url.search('attribute=') != -1){
+                    this.url = this.url.replace(/(attribute=.*?&&)/gi, 'attribute=' + attribute + '&&');
+                }
+                else{
+                    this.url += 'attribute=' + attribute.toString() + '&&';
+                }
             }
             axios.get(this.url).then(response => {
                 this.products = response.data;
