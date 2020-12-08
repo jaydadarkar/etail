@@ -38,6 +38,26 @@
                             </div>
                             </a>
                         </div>
+                        <div class="card m-1" v-else-if="product[0].product_type == 'affiliate'">
+                            <a class="text-decoration-none text-dark" v-bind:href="'/product/'+product[0].product_slug">
+                            <div class="card-header p-0">
+                                <img v-bind:src="product[0].product_primary_image" v-bind:alt="product[0].product_name" class="img-fluid">
+                            </div>
+                            <div class="card-body">
+                                <h5>{{ product[0].product_name }}</h5>
+                                <p class="price">
+                                    <span class="text-dander" v-if="(product[0].product_mrp != 'null') && (product[0].product_mrp != undefined) && (product[0].product_mrp > product[0].product_price)">{{ product[0].product_mrp }}</span>
+                                    <span class="text-success">{{ product[0].product_price }}</span>
+                                </p>
+                                <hr />
+                                <div class="row text-center">
+                                    <div class="col-12 p-0 m-0">
+                                        <a v-bind:href="'/product/'+product[0].product_slug" class="btn btn-secondary">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
                         <div class="card m-1" v-else>
                             <a class="text-decoration-none text-dark" v-bind:href="'/product/'+product[0].product_slug">
                             <div class="card-header p-0">

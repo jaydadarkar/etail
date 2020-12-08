@@ -35,40 +35,35 @@
             </div>
             <div class="col-md-7">
                 <h3>{{ product.product_name }}</h3>
-                <h5 class="price"><s class="text-dander">{{ product.product_mrp }}</s> <span class="text-success">{{ product.product_price }}</span></h5>
+                <h5 class="price"><s class="text-danger">{{ product.product_mrp }}</s> <span class="text-success">{{ product.product_price }}</span></h5>
                 <hr />
                 <p>{{ product.product_short_desc }}</p>
                 <div v-if="product.product_type == 'variable'">
                 <br />
-                <h5>Size</h5>
-                <a href="" class="btn rounded-pill text-dark border">S</a>
-                <a href="" class="btn rounded-pill text-dark border">M</a>
-                <a href="" class="btn rounded-pill text-dark border">L</a>
-                <a href="" class="btn rounded-pill text-dark border">XL</a>
-                <p></p>
-                <h5>Color</h5>
-                <a href="" class="btn rounded-circle bg-primary p-3"></a>
-                <a href="" class="btn rounded-circle bg-secondary p-3"></a>
-                <a href="" class="btn rounded-circle bg-warning p-3"></a>
-                <a href="" class="btn rounded-circle bg-success p-3"></a>
-                <a href="" class="btn rounded-circle bg-danger p-3"></a>
-                <p></p>
+                <div v-for="vars in Object.keys(variation)" :key="vars">
+                    <h5>{{vars}}</h5>
+                    <select class="form-control" required @change="selectVariation(vars,$event.target.value)">
+                        <option value="" selected disabled>Select {{vars}}</option>
+                        <option v-bind:value="attribute" v-for="attribute in variation[vars]" :key="attribute">{{attribute}}</option>
+                    </select>
+                    <p></p>
+                </div>
                 </div>
                 <hr />
-                <p></p>
                 <div v-if="product.product_type != 'affiliate'">
                 <div id="quantity" class="">
                     <div class="input-group">
-                       <input type="button" value="-" class="button-minus" data-field="quantity">
-                       <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
-                       <input type="button" value="+" class="button-plus" data-field="quantity">
+                       <input type="button" value="-" class="button-minus" data-field="quantity" @click="decrement()">
+                       <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field" v-model="product_quanttity">
+                       <input type="button" value="+" class="button-plus" data-field="quantity" @click="increment()">
+                       <input type="hidden" v-model="product_id" id="product_id">
                        <a class="btn btn-primary btn-lg ml-1">Add To Cart</a>
                        <a class="btn btn-danger btn-lg ml-1">Add To Wishlist</a>
                     </div>
                 </div>
                 </div>
                 <div v-else>
-                       <a class="btn btn-primary btn-lg ml-1" target="_blank" v-bind:href="product.product_affiliate_link">Go To Shop</a>
+                       <a class="btn btn-primary btn-lg ml-1" target="_blank" v-bind:href="product.product_link">Go To Shop</a>
                 </div>
                 <br />
                 <div class="product_category">
@@ -99,48 +94,69 @@ export default {
         },
         data(){
             return{
-                product:{}
+                product:{},
+                variation: {},
+                selected_variation: [],
+                product_id: '',
+                product_quanttity: 1
             }
         },
         mounted(){
 
             axios.get('/api/product/show/' + this.$route.params.slug).then(response =>{
                 this.product = response.data;
+                this.product_id = this.product.id;
+                if(this.product.product_type === "variable"){
+                    let keys = this.product.variations[0].product_variation.split(",");
+                    keys.forEach((item) => {
+                        let name = item.split(":")[0];
+                        this.variation[name] = [];
+                    });
+                    this.product.variations.forEach((item) => {
+                        let vars = item.product_variation.split(",");
+                        vars.forEach((item) => {
+                            let single = item.split(":");
+                            if(!this.variation[single[0]].includes(single[1])) this.variation[single[0]].push(single[1]);
+                        });                        
+                    });
+                }
             }).catch(error => {console.log(error)});
-
-            function incrementValue(e) {
-                e.preventDefault();
-                var fieldName = $(e.target).data('field');
-                var parent = $(e.target).closest('div');
-                var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
-
-                if (!isNaN(currentVal)) {
-                    parent.find('input[name=' + fieldName + ']').val(currentVal + 1);
-                } else {
-                    parent.find('input[name=' + fieldName + ']').val(1);
+        },
+        methods: {
+            increment(){
+                this.product_quanttity = this.product_quanttity + 1;
+            },
+            decrement(){
+                if (this.product_quanttity > 1) {
+                    this.product_quanttity = this.product_quanttity - 1;
+                } 
+                else {
+                    this.product_quanttity = 1;
                 }
+            },
+            selectVariation(attribute, value){
+                let selected = attribute + ":" + value;
+                if(!this.selected_variation.includes(selected)) {
+                    let match = undefined;
+                    this.selected_variation.forEach((item, i) => {
+                        var regx = new RegExp(attribute + ':', 'g');
+                        if(item.match(regx)){
+                            match = i;
+                        };
+                    });
+                    if(match == undefined) this.selected_variation.push(selected)
+                    else this.selected_variation[match] = selected;
                 }
-
-                function decrementValue(e) {
-                e.preventDefault();
-                var fieldName = $(e.target).data('field');
-                var parent = $(e.target).closest('div');
-                var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
-
-                if (!isNaN(currentVal) && currentVal > 1) {
-                    parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
-                } else {
-                    parent.find('input[name=' + fieldName + ']').val(1);
-                }
-                }
-
-                $('.input-group').on('click', '.button-plus', function(e) {
-                incrementValue(e);
+                axios.get('/api/product-variation/show/'+ this.product.product_sku +'/' + this.selected_variation.toString()).then(response => {
+                    if(response.data != ""){
+                        this.product_id = response.data.id;
+                        document.querySelector(".price .text-danger").innerHTML = response.data.product_mrp;
+                        document.querySelector(".price .text-success").innerHTML = response.data.product_price;
+                    }
+                }).catch(error => {
+                    console.log(error);
                 });
-
-                $('.input-group').on('click', '.button-minus', function(e) {
-                decrementValue(e);
-                });
+            }
         }
     }
 </script>

@@ -12,7 +12,7 @@ class Product extends Model
 {
     protected $fillable = [
         'product_name', 'product_sku', 'product_slug', 'product_brand', 'product_category', 'product_variation',
-        'product_short_desc', 'product_long_desc', 'product_type', 'product_affiliate_link',
+        'product_short_desc', 'product_long_desc', 'product_type', 'product_link',
         'product_mrp', 'product_price', 'product_quantity', 'product_primary_image',
         'product_other_images', 'product_meta_keywords', 'product_meta_desc', 'product_featured', 'product_published',
         'product_tags', 'product_dimensions', 'created_at', 'updated_at'

@@ -36,6 +36,7 @@ class ProductController extends Controller
         }
 
         $p = $p->get();
+        $p = $p->makeHidden(['product_link']);
         $p = $p->groupBy('product_sku');
         return response()->json($p, 200);
     }
@@ -93,7 +94,7 @@ class ProductController extends Controller
                     'product_slug' => $request->product_name,
                     'product_category' => $request->product_category,
                     'product_brand' => $request->product_brand,
-                    'product_affiliate_link' => $request->product_affiliate_link,
+                    'product_link' => $request->product_link,
                     'product_short_desc' => $request->product_short_desc,
                     'product_long_desc' => $request->product_long_desc,
                     'product_type' => $request->product_type,
@@ -112,6 +113,34 @@ class ProductController extends Controller
                     'updated_at' => Carbon::now()
                 ]);
             break;
+
+            case 'digital':
+                $p = Product::create([
+                    'product_name' => $request->product_name,
+                    'product_sku' => $request->product_sku,
+                    'product_slug' => $request->product_name,
+                    'product_category' => $request->product_category,
+                    'product_brand' => $request->product_brand,
+                    'product_link' => $request->product_link,
+                    'product_short_desc' => $request->product_short_desc,
+                    'product_long_desc' => $request->product_long_desc,
+                    'product_type' => $request->product_type,
+                    'product_mrp' => $request->product_mrp,
+                    'product_price' => $request->product_price,
+                    'product_quantity' => $request->product_quantity,
+                    'product_primary_image' => $request->product_primary_image,
+                    'product_other_images' => !empty($request->product_other_images) ? $request->product_other_images : null,
+                    'product_meta_keywords' => $request->product_meta_keywords,
+                    'product_meta_desc' => $request->product_meta_desc,
+                    'product_published' => $request->product_published,
+                    'product_featured' => ($request->product_featured == true) ? 1 : 0,
+                    'product_tags' => $request->product_tags,
+                    'product_dimensions' => $request->product_dimensions,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+            break;
+
             case 'variable':
                 // Create Parent
                 $p = Product::create([
@@ -213,6 +242,9 @@ class ProductController extends Controller
     public function show(Request $request)
     {
         $p = Product::where('product_slug', $request->slug)->with(['questions', 'rating', 'variations'])->first();
+        if($p->product_type == 'digital'){
+            $p = $p->makeHidden(['product_link']);
+        }
         $p->category_detail = ProductCategory::whereIn('id', $p->product_category)->get();
         return response()->json($p, 200);
     }
@@ -335,5 +367,9 @@ class ProductController extends Controller
         }
         // Cross Join The 2 Collections
         return $collectionA->crossJoin($collectionB);
+    }
+
+    public function variation(Request $request){
+        return Product::where([['product_sku', $request->main_sku], ['product_variation', '=' , serialize($request->variation)]])->first();
     }
 }

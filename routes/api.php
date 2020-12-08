@@ -24,6 +24,7 @@ Route::post('/password/confirm', 'Auth\CustomResetPassword@resetPasswordWithToke
 
 Route::get('/product/get', 'ProductController@index')->name('product.get');
 Route::get('/product/show/{slug}', 'ProductController@show')->name('product.show');
+Route::get('/product-variation/show/{main_sku}/{variation}', 'ProductController@variation')->name('product.show.variation');
 Route::get('/product-category/get', 'ProductCategoryController@index')->name('product-category.get');
 Route::get('/product-attributes/get', 'ProductAttributeController@index')->name('product-attribute.get');
 Route::get('/pages/get', 'PageController@index')->name('pages.get');
