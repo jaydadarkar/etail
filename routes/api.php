@@ -32,6 +32,10 @@ Route::get('/page/{slug}', 'PageController@show')->name('pages.show');
 Route::get('/posts/get', 'BlogController@index')->name('posts.get');
 Route::get('/posts/{slug}', 'BlogController@show')->name('posts.show');
 
+Route::get('cart', 'CartController@index')->name('cart');
+Route::post('cart/add', 'CartController@store')->name('cart.add');
+Route::post('cart/remove', 'CartController@destroy')->name('cart.remove');
+
 // Auth Routes
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', function (Request $request) {return $request->user();});

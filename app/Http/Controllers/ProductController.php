@@ -35,6 +35,7 @@ class ProductController extends Controller
             }
         }
 
+        $p = $p->where('product_quantity', '>', 0);
         $p = $p->get();
         $p = $p->makeHidden(['product_link']);
         $p = $p->groupBy('product_sku');

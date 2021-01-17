@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+use App\Models\Cart;
+use App\Models\Wishlist;
+
 class LoginController extends Controller
 {
     /*
@@ -59,7 +62,60 @@ class LoginController extends Controller
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $token = $user->createToken('etail_token')->plainTextToken;
-            return response()->json(['token' => $token, 'role' => $user->role], 200);
+
+            $response = response()->json(['token' => $token, 'role' => $user->role], 200);
+
+            $userCart = Cart::where('user_id', $user->id)->first();
+            if(!empty($userCart)){
+                $data = $userCart->data;
+                if(!empty($request->cookie('cart'))){
+                    if($data != $request->cookie('cart')){
+                        $data = $request->cookie('cart');
+                        Cart::where('user_id', $user->id)->update([
+                            'data' => $data,
+                            'updated_at' => now()
+                        ]);    
+                    }
+                }
+                $response = $response->withCookie('cart', $data);
+            }
+
+            if($request->cookie('cart') && empty($userCart)){
+                $data = $request->cookie('cart');
+                Cart::create([
+                    'user_id' => $user->id,
+                    'data' => $data,
+                    'updated_at' => now()
+                ]);
+                $response = $response->withCookie('cart', $data);
+            }
+
+            $userWishlist = Wishlist::where('user_id', $user->id)->first();
+            if(!empty($userWishlist)){
+                $data = $userWishlist->data;
+                if(!empty($request->cookie('wishlist'))){
+                    if($data != $request->cookie('wishlist')){
+                        $data = $request->cookie('cart');
+                        Wishlist::where('user_id', $user->id)->update([
+                            'data' => $data,
+                            'updated_at' => now()
+                        ]);
+                    }
+                }
+                $response = $response->withCookie('wishlist', $data);
+            }
+
+            if($request->cookie('wishlist') && empty($userWishlist)){
+                $data = $request->cookie('wishlist');
+                Wishlist::create([
+                    'user_id' => $user->id,
+                    'data' => $data,
+                    'updated_at' => now()
+                ]);
+                $response = $response->withCookie('cart', $data);
+            }
+
+            return $response;
         }
         else{
             return response()->json(['error' => 'Invalid Email / Password.'], 401);
@@ -73,6 +129,15 @@ class LoginController extends Controller
             Auth::user()->tokens()->delete();
             $request->session()->invalidate();
         }
-        return response()->json('logged out', 200);
+
+        if(!empty(\Cookie::get('cart'))){
+            \Cookie::queue(\Cookie::forget('cart'));
+        }
+
+        if(!empty(\Cookie::get('wishlist'))){
+            \Cookie::queue(\Cookie::forget('wishlist'));
+        }
+
+        return response()->json('You Are Logged Out', 200);
     }
 }

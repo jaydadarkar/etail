@@ -57,8 +57,8 @@
                        <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field" v-model="product_quanttity">
                        <input type="button" value="+" class="button-plus" data-field="quantity" @click="increment()">
                        <input type="hidden" v-model="product_id" id="product_id">
-                       <a class="btn btn-primary btn-lg ml-1">Add To Cart</a>
-                       <a class="btn btn-danger btn-lg ml-1">Add To Wishlist</a>
+                       <a class="btn btn-primary btn-lg ml-1" @click="addToCart()">Add To Cart</a>
+                       <a class="btn btn-danger btn-lg ml-1" @click="addToWishlist()">Add To Wishlist</a>
                     </div>
                 </div>
                 </div>
@@ -156,6 +156,20 @@ export default {
                 }).catch(error => {
                     console.log(error);
                 });
+            },
+            addToCart(){
+                axios.post('/api/cart/add', {product: this.product_id, quantity: this.product_quanttity}).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error);
+                    });
+            },
+            addToWishlist(){
+                axios.post('/api/wishlist/add', {product: this.product_id}).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error);
+                    });
             }
         }
     }
